@@ -4,6 +4,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
   site: process.env.SITE_URL || 'https://queenx23.github.io',
   base: process.env.BASE_PATH || '/',
+
   markdown: {
     shikiConfig: {
       themes: {
@@ -12,6 +13,7 @@ export default defineConfig({
       },
     },
   },
+
   fonts: [
     {
       name: 'Inter',
