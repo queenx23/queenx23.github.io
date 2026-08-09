@@ -1,23 +1,24 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import avatar from '../assets/images/golshi.jpg';
 
+const { Content } = await render(frontmatter);
+---
 
 <PageLayout
     title={frontmatter.title}
     cover={frontmatter.cover}
     subclass={frontmatter.subclass}
 >
-  <Content />
+    <div class="about-content">
+
+        <img
+            src={avatar.src}
+            alt="Avatar"
+            class="about-avatar"
+        />
+
+        <Content />
+
+    </div>
 </PageLayout>
-
-<div class="about-content">
-    <img
-        src="/images/golshi.jpg"
-        alt="Avatar"
-        class="about-avatar"
-    />
-
-    <h2>Sobre mí</h2>
-
-    <p>
-        Aquí irá tu presentación.
-    </p>
-</div>
