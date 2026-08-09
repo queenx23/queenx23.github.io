@@ -544,3 +544,57 @@ h6 {
 .nav-evidencias .nav-submenu li a:hover {
     background: #f5f5f5;
 }
+/* Permitir que el menú de Evidencias salga del contenedor */
+.site-nav {
+    overflow: visible !important;
+}
+
+.site-nav-left {
+    overflow: visible !important;
+}
+
+.nav-evidencias {
+    position: relative;
+}
+
+.nav-evidencias .nav-submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    display: none !important;
+
+    min-width: 180px;
+    margin: 10px 0 0;
+    padding: 8px 0;
+
+    background: #222629;
+    border-radius: 3px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.35);
+
+    z-index: 99999;
+}
+
+.nav-evidencias:hover > .nav-submenu {
+    display: block !important;
+}
+
+.nav-evidencias .nav-submenu li {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-evidencias .nav-submenu li a {
+    display: block;
+    padding: 9px 18px;
+
+    color: #fff;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.nav-evidencias .nav-submenu li a:hover {
+    background: #343a3e;
+    text-decoration: none;
+}
