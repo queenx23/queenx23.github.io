@@ -1,0 +1,25 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { getAssetUrl } from '../config';
+---
+
+<PageLayout
+    title="Sobre mí"
+    subclass="about-page"
+>
+    <div class="about-content">
+
+        <img
+            src={getAssetUrl('/assets/images/Golshi.jpg')}
+            alt="Avatar"
+            class="about-avatar"
+        />
+
+        <h2>Sobre mí</h2>
+
+        <p>
+            Aquí irá tu presentación.
+        </p>
+
+    </div>
+</PageLayout>
