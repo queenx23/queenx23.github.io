@@ -1,14 +1,10 @@
 ---
-import { render } from 'astro:content';
 import PageLayout from '../layouts/PageLayout.astro';
-
-const { Content } = await render(frontmatter);
 ---
 
 <PageLayout
-    title={frontmatter.title}
-    cover={frontmatter.cover}
-    subclass={frontmatter.subclass}
+    title="Sobre mí"
+    subclass="about-page"
 >
     <div class="about-content">
 
@@ -18,7 +14,11 @@ const { Content } = await render(frontmatter);
             class="about-avatar"
         />
 
-        <Content />
+        <h2>Sobre mí</h2>
+
+        <p>
+            Aquí irá tu presentación.
+        </p>
 
     </div>
 </PageLayout>
