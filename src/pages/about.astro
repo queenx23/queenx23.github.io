@@ -1,12 +1,25 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
-import { Content, frontmatter } from '../data/about.md';
+import avatar from '../assets/images/golshi.jpg';
 ---
 
 <PageLayout
-  title={frontmatter.title}
-  cover={frontmatter.cover}
-  subclass={frontmatter.subclass}
+    title={frontmatter.title}
+    cover={frontmatter.cover}
+    subclass={frontmatter.subclass}
 >
   <Content />
 </PageLayout>
+
+<div class="about-content">
+    <img
+        src={avatar.src}
+        alt="Avatar"
+        class="about-avatar"
+    />
+
+    <h2>Sobre mí</h2>
+
+    <p>
+        Aquí irá tu presentación.
+    </p>
+</div>

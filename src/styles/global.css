@@ -598,3 +598,12 @@ h6 {
     background: #343a3e;
     text-decoration: none;
 }
+
+.about-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 30px;
+}
