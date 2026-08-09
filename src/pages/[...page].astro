@@ -1,6 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SiteNav from '../components/SiteNav.astro';
+
+export function getStaticPaths() {
+    return [
+        {
+            params: {}
+        }
+    ];
+}
 ---
 
 <Layout title="Inicio">
