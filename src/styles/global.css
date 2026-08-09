@@ -607,3 +607,13 @@ h6 {
     display: block;
     margin: 0 auto 30px;
 }
+.about-video {
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+.about-video video {
+    width: 100%;
+    display: block;
+    border-radius: 10px;
+}
