@@ -1,13 +1,7 @@
 ---
 import Navigation from './Navigation.astro';
 import { SITE_CONFIG, getAssetUrl } from '../config';
-import Facebook from './icons/Facebook.astro';
-import Twitter from './icons/Twitter.astro';
-import X from './icons/X.astro';
-import Github from './icons/Github.astro';
-import Search from './icons/Search.astro';
-import Sun from './icons/Sun.astro';
-import Moon from './icons/Moon.astro';
+
 
 interface Props {
   current?: string;
@@ -44,41 +38,7 @@ const showLogo = current !== 'home';
             )
         )}
         
-        <div class="social-links">
-            {SITE_CONFIG.facebook && (
-                <a class="social-link social-link-fb" href={`https://facebook.com/${SITE_CONFIG.facebook}`} target="_blank" rel="noopener" aria-label="Facebook">
-                    <Facebook />
-                </a>
-            )}
-            {SITE_CONFIG.xUsername ? (
-                <a class="social-link social-link-tw" href={`https://x.com/${SITE_CONFIG.xUsername}`} target="_blank" rel="noopener" aria-label="X">
-                    <X style="width:16px;height:16px;" />
-                </a>
-            ) : SITE_CONFIG.twitter && (
-                <a class="social-link social-link-tw" href={`https://twitter.com/${SITE_CONFIG.twitter}`} target="_blank" rel="noopener" aria-label="Twitter">
-                    <Twitter style="width:16px;height:16px;" />
-                </a>
-            )}
-            {SITE_CONFIG.github && (
-                <a class="social-link social-link-gh" href={`https://github.com/${SITE_CONFIG.github}`} target="_blank" rel="noopener" aria-label="GitHub">
-                    <Github style="width:16px;height:16px;" />
-                </a>
-            )}
-        </div>
         
-        {(SITE_CONFIG.facebook || SITE_CONFIG.twitter || SITE_CONFIG.xUsername || SITE_CONFIG.github) && (
-            <span class="nav-divider" style="display: inline-block; width: 1px; height: 16px; background: rgba(255, 255, 255, 0.3); margin: 0 5px 0 10px;"></span>
-        )}
-
-        <a class="social-link theme-toggle" href="#" style="cursor: pointer; margin-right: 10px;" title="Toggle Theme" aria-label="Toggle Theme">
-            <Moon class="icon-moon" style="height: 1.8rem; overflow: visible;" />
-            <Sun class="icon-sun" style="display: none; height: 1.8rem; overflow: visible;" />
-        </a>
-
-        {SITE_CONFIG.subscribers && (
-            <a class="subscribe-button" href="#subscribe">Subscribe</a>
-        )}
-    </div>
 </nav>
 
 <script>
