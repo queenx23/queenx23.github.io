@@ -1,25 +1,59 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import SiteNav from '../components/SiteNav.astro';
+import PostCard from '../components/PostCard.astro';
+import AlgoliaSearch from '../components/AlgoliaSearch.astro';
+import { SITE_CONFIG, getAssetUrl } from '../config';
 
-export function getStaticPaths() {
-    return [
-        {
-            params: {}
-        }
-    ];
+export async function getStaticPaths({ paginate }: any) {
+  const allPosts = await getCollection('posts');
+  allPosts.sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  );
+
+  const pages = paginate(allPosts, {
+    pageSize: SITE_CONFIG.pageSize
+  });
+
+  return pages.map((p: any) => ({
+    params: {
+      page:
+        p.params.page === 1 ||
+        p.params.page === '1' ||
+        !p.params.page
+          ? undefined
+          : `page${p.params.page}`
+    },
+    props: {
+      pageProps: p.props,
+      maxPages: pages.length
+    }
+  }));
 }
+
+const { pageProps, maxPages } = Astro.props;
+const { page } = pageProps;
 ---
 
-<Layout title="Inicio">
-    <header class="site-header outer">
-        <div class="inner">
-            <SiteNav />
-        </div>
-    </header>
+<!-- Main Content Feed -->
+<main id="site-main" class="site-main outer" role="main">
+  <div class="inner">
+    {SITE_CONFIG.algolia && (
+      <div id="search-hits" class="post-feed" style="display: none;"></div>
+    )}
 
-    <main id="site-main" class="site-main outer" role="main">
-        <div class="inner">
-        </div>
-    </main>
-</Layout>
+    <div
+      id="posts"
+      class="post-feed"
+      data-max-pages={maxPages}
+      data-base-url={getAssetUrl('/')}
+    >
+      {page.data.map((post: any) => (
+        <PostCard post={post} />
+      ))}
+    </div>
+
+    {SITE_CONFIG.algolia && <AlgoliaSearch />}
+  </div>
+</main>
