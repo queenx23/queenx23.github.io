@@ -1,5 +1,7 @@
 ---
+---
 import PageLayout from '../layouts/PageLayout.astro';
+import { getAssetUrl } from '../config';
 ---
 
 <PageLayout
@@ -9,7 +11,7 @@ import PageLayout from '../layouts/PageLayout.astro';
     <div class="about-content">
 
         <img
-            src="/assets/images/golshi.jpg"
+            src={getAssetUrl('/assets/images/golshi.jpg')}
             alt="Avatar"
             class="about-avatar"
         />
