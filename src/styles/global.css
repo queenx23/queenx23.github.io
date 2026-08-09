@@ -95,6 +95,71 @@ summary,
 time,
 mark,
 audio,
+/* =========================================================
+   Menú desplegable de Evidencias
+   ========================================================= */
+
+.nav-evidencias {
+    position: relative;
+}
+
+.nav-evidencias > a {
+    display: block;
+}
+
+/* Submenú oculto inicialmente */
+.nav-submenu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: none;
+
+    min-width: 170px;
+    margin: 12px 0 0;
+    padding: 8px 0;
+
+    list-style: none;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+
+    z-index: 1000;
+}
+
+/* Mostrar al pasar el mouse */
+.nav-evidencias:hover .nav-submenu {
+    display: block;
+}
+
+/* Elementos del submenú */
+.nav-submenu li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-submenu li a {
+    display: block;
+    padding: 7px 16px;
+
+    color: #3b474c;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    white-space: nowrap;
+
+    text-decoration: none;
+}
+
+.nav-submenu li a:hover {
+    color: #22a3eb;
+    text-decoration: none;
+    background: #f5f8fa;
+}
+
+
+
 video {
     margin: 0;
     padding: 0;
