@@ -2,8 +2,31 @@
 import { getAssetUrl } from '../config';
 ---
 <ul class="nav" role="menu">
-    <li class="nav-home" role="menuitem"><a href={getAssetUrl('/')}>Home</a></li>
-    <li class="nav-about" role="menuitem"><a href={getAssetUrl('/about/')}>About</a></li>
-    <li class="nav-getting-started" role="menuitem"><a href={getAssetUrl('/tag/getting-started/')}>Getting Started</a></li>
-    <li class="nav-try-ghost" role="menuitem"><a href="https://astro.build" target="_blank" rel="noopener">Try Astro</a></li>
+
+  <li class="nav-evidencias" role="menuitem">
+    <a href="#">Evidencias</a>
+
+    <ul class="nav-submenu">
+      <li role="menuitem">
+        <a href={getAssetUrl('/evidencias/modelado/')}>Modelado</a>
+      </li>
+
+      <li role="menuitem">
+        <a href={getAssetUrl('/evidencias/normalizacion/')}>Normalización</a>
+      </li>
+
+      <li role="menuitem">
+        <a href={getAssetUrl('/evidencias/sql/')}>SQL</a>
+      </li>
+
+      <li role="menuitem">
+        <a href={getAssetUrl('/evidencias/proyecto/')}>Proyecto</a>
+      </li>
+    </ul>
+  </li>
+
+  <li class="nav-about" role="menuitem">
+    <a href={getAssetUrl('/about/')}>Sobre mí</a>
+  </li>
+
 </ul>
