@@ -617,3 +617,13 @@ h6 {
     display: block;
     border-radius: 10px;
 }
+.modelado-content {
+    text-align: center;
+}
+
+.modelado-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 30px auto;
+}
