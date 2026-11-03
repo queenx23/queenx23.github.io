@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import SiteNav from '../../components/SiteNav.astro';
+import { getAssetUrl } from '../../config';
 
 // Pega aquí el link de Draw.io para "Nuevos ejercicios"
 const DRAWIO_LINK = 'PEGA_AQUI_EL_LINK_DE_DRAWIO';
@@ -39,11 +40,12 @@ const DRAWIO_LINK = 'PEGA_AQUI_EL_LINK_DE_DRAWIO';
 
                     <!-- ============ EJERCICIO 1 ============ -->
                     <article class="quiz-card">
-                        <h3>Ejercicio 1: Taller mecánico</h3>
+                        <h3 class="quiz-card-title">Quiz de la Mañana · Ejercicio 1</h3>
+                        <p class="quiz-card-subtitle">Taller mecánico</p>
 
-                        <a href="/assets/images/quiz1-ejercicio1.png" target="_blank" rel="noopener noreferrer">
+                        <a href={getAssetUrl('/assets/images/quiz1-ejercicio1.png')} target="_blank" rel="noopener noreferrer">
                             <img
-                                src="/assets/images/quiz1-ejercicio1.png"
+                                src={getAssetUrl('/assets/images/quiz1-ejercicio1.png')}
                                 alt="Modelo entidad-relación: Cliente registra Vehículo; Mecánico repara Vehículo"
                                 class="quiz-card-img"
                                 loading="lazy"
@@ -70,11 +72,12 @@ const DRAWIO_LINK = 'PEGA_AQUI_EL_LINK_DE_DRAWIO';
 
                     <!-- ============ EJERCICIO 2 ============ -->
                     <article class="quiz-card">
-                        <h3>Ejercicio 2: Préstamo de equipos</h3>
+                        <h3 class="quiz-card-title">Quiz de la Mañana · Ejercicio 2</h3>
+                        <p class="quiz-card-subtitle">Préstamo de equipos</p>
 
-                        <a href="/assets/images/quiz1-ejercicio2.png" target="_blank" rel="noopener noreferrer">
+                        <a href={getAssetUrl('/assets/images/quiz1-ejercicio2.png')} target="_blank" rel="noopener noreferrer">
                             <img
-                                src="/assets/images/quiz1-ejercicio2.png"
+                                src={getAssetUrl('/assets/images/quiz1-ejercicio2.png')}
                                 alt="Modelo entidad-relación: Equipo posee Unidad física; Usuario presta Unidad física"
                                 class="quiz-card-img"
                                 loading="lazy"

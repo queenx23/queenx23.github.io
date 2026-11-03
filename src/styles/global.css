@@ -654,15 +654,23 @@ h6 {
 .quiz-card {
     padding: 24px;
     background: #fff;
+    color: #3b474c;
     border: 1px solid var(--whitegrey);
     border-radius: 6px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.quiz-card h3 {
-    margin-top: 0;
+.quiz-card .quiz-card-title {
+    margin: 0 0 4px;
     color: var(--darkgrey);
     font-size: 2rem;
+}
+
+.quiz-card .quiz-card-subtitle {
+    margin: 0 0 16px;
+    color: #4a5a63;
+    font-size: 1.5rem;
+    font-weight: 500;
 }
 
 .quiz-card-img {
@@ -677,6 +685,7 @@ h6 {
     margin-top: 18px;
     padding: 14px 16px;
     background: #f7fafc;
+    color: #3b474c;
     border-left: 4px solid var(--blue);
     border-radius: 3px;
 }
@@ -695,6 +704,7 @@ h6 {
 
 .quiz-cell li {
     margin: 0.4em 0;
+    color: #3b474c;
     font-size: 1.4rem;
     line-height: 1.5em;
 }
@@ -723,6 +733,16 @@ h6 {
 .quiz-nuevos-link:hover {
     background: #22a3eb;
     text-decoration: none;
+}
+
+/* Modo oscuro: títulos y texto fuera de las tarjetas */
+html.dark-mode .quiz-title,
+html.dark-mode .quiz-nuevos p {
+    color: #fff;
+}
+
+html.dark-mode .quiz-nuevos {
+    border-top-color: #3a4147;
 }
 
 @media (max-width: 800px) {
