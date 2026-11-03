@@ -2,6 +2,13 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteNav from '../../components/SiteNav.astro';
 
+// Diagrama MER (modelo entidad-relación)
+const MER_VIEW_URL =
+    'https://viewer.diagrams.net/?lightbox=1&highlight=0000ff&nav=1&title=MER&dark=auto#G1hFeRHfClpH0v2C7uZzADVFpEs85DmZQR';
+const MER_EDIT_URL =
+    'https://app.diagrams.net/#G1hFeRHfClpH0v2C7uZzADVFpEs85DmZQR';
+
+// Diagrama transformado (modelo relacional)
 const DIAGRAM_URL =
     'https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Transformacion&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1YEdp_4iuGkx4sTSG6zd0sfN5fLEpaVXf%26export%3Ddownload';
 ---
@@ -53,15 +60,39 @@ const DIAGRAM_URL =
                     </details>
                 </section>
 
+                <!-- ===================== DIAGRAMA MER ===================== -->
+                <section class="proyecto-card">
+                    <h2>Diagrama MER</h2>
+                    <p>
+                        El <strong>MER</strong> (modelo entidad-relación) es el primer dibujo del proyecto.
+                        Muestra las cosas importantes del café, como los juegos, las mesas y los clientes,
+                        y cómo se relacionan entre sí.
+                    </p>
+
+                    <div class="proyecto-diagrama">
+                        <iframe
+                            src={MER_VIEW_URL}
+                            title="Diagrama MER del proyecto"
+                            loading="lazy"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+
+                    <a
+                        class="proyecto-link"
+                        href={MER_EDIT_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Abrir el diagrama MER en una pestaña nueva
+                    </a>
+                </section>
+
                 <!-- ===================== QUÉ ES UN DIAGRAMA TRANSFORMADO ===================== -->
                 <section class="proyecto-card">
                     <h2>¿Qué es un diagrama transformado?</h2>
                     <p>
-                        Primero se dibuja el modelo entidad-relación, que muestra las cosas del negocio
-                        (por ejemplo juegos, mesas y clientes) y cómo se conectan entre sí.
-                    </p>
-                    <p>
-                        El <strong>diagrama transformado</strong> es ese mismo modelo, pero convertido a
+                        El <strong>diagrama transformado</strong> es el MER convertido a
                         <strong>tablas</strong>, que es la forma en que realmente se guarda la información
                         en una base de datos. Es como pasar un plano a una lista de materiales: ya no
                         decimos qué ideas existen, sino dónde se va a guardar cada dato.
@@ -72,9 +103,9 @@ const DIAGRAM_URL =
                     </p>
                 </section>
 
-                <!-- ===================== DIAGRAMA ===================== -->
+                <!-- ===================== DIAGRAMA TRANSFORMADO ===================== -->
                 <section class="proyecto-card">
-                    <h2>Diagrama del proyecto</h2>
+                    <h2>Diagrama transformado del proyecto</h2>
 
                     <div class="proyecto-diagrama">
                         <iframe
@@ -91,45 +122,58 @@ const DIAGRAM_URL =
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Abrir el diagrama en una pestaña nueva
+                        Abrir el diagrama transformado en una pestaña nueva
                     </a>
                 </section>
 
-                <!-- ===================== PARTES DEL DIAGRAMA ===================== -->
+                <!-- ===================== PARTES DEL DIAGRAMA (DESPLEGABLES) ===================== -->
                 <section class="proyecto-card">
                     <h2>Partes del diagrama</h2>
 
                     <div class="proyecto-partes">
-                        <div class="proyecto-parte">
-                            <h3>Tablas</h3>
+                        <details class="proyecto-parte">
+                            <summary>Tablas</summary>
                             <p>Son los cuadros grandes. Cada una guarda un tipo de información, como los juegos, las mesas o los préstamos.</p>
-                        </div>
+                        </details>
 
-                        <div class="proyecto-parte">
-                            <h3>Columnas</h3>
+                        <details class="proyecto-parte">
+                            <summary>Columnas</summary>
                             <p>Son los datos dentro de cada tabla, por ejemplo el nombre de un juego o la fecha de un préstamo.</p>
-                        </div>
+                        </details>
 
-                        <div class="proyecto-parte">
-                            <h3>Llave primaria (PK)</h3>
+                        <details class="proyecto-parte">
+                            <summary>Llave primaria (PK)</summary>
                             <p>Es la columna que identifica cada fila de forma única, como un número de cédula. No se puede repetir.</p>
-                        </div>
+                        </details>
 
-                        <div class="proyecto-parte">
-                            <h3>Llave foránea (FK)</h3>
+                        <details class="proyecto-parte">
+                            <summary>Llave foránea (FK)</summary>
                             <p>Es una columna que apunta a la llave primaria de otra tabla. Así es como una tabla se conecta con otra.</p>
-                        </div>
+                        </details>
 
-                        <div class="proyecto-parte">
-                            <h3>Líneas de relación</h3>
+                        <details class="proyecto-parte">
+                            <summary>Líneas de relación</summary>
                             <p>Las líneas entre tablas muestran qué tablas están conectadas y cuántos registros de una pueden asociarse con la otra (uno a muchos, muchos a muchos).</p>
-                        </div>
+                        </details>
 
-                        <div class="proyecto-parte">
-                            <h3>Tabla intermedia</h3>
+                        <details class="proyecto-parte">
+                            <summary>Tabla intermedia</summary>
                             <p>Cuando dos tablas se relacionan de muchos a muchos, se crea una tabla en medio que une a las dos y guarda los datos de esa unión.</p>
-                        </div>
+                        </details>
                     </div>
+                </section>
+
+                <!-- ===================== APRENDIZAJES ===================== -->
+                <section class="proyecto-card">
+                    <h2>Aprendizajes del proyecto</h2>
+
+                    <ul class="proyecto-aprendizajes">
+                        <li><strong>Modelar antes de construir:</strong> dibujar el MER primero ayuda a entender el negocio y evita errores en la base de datos.</li>
+                        <li><strong>Pasar del MER a tablas:</strong> aprendí cómo cada entidad, atributo y relación se convierte en tablas, columnas y llaves.</li>
+                        <li><strong>Importancia de las llaves:</strong> las llaves primarias y foráneas son las que mantienen los datos ordenados y conectados.</li>
+                        <li><strong>Control del inventario:</strong> llevar el estado de cada juego permite saber en todo momento qué hay disponible.</li>
+                        <li><strong>Trabajo en equipo:</strong> escribe aquí lo que aprendiste al trabajar con tus compañeros.</li>
+                    </ul>
                 </section>
 
             </div>
