@@ -1,6 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import SiteNav from '../../components/SiteNav.astro';
+
+const DIAGRAM_URL =
+    'https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Transformacion&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1YEdp_4iuGkx4sTSG6zd0sfN5fLEpaVXf%26export%3Ddownload';
 ---
 
 <Layout title="Proyecto">
@@ -9,12 +12,128 @@ import SiteNav from '../../components/SiteNav.astro';
             <SiteNav />
             <div class="site-header-content">
                 <h1 class="site-title">Proyecto</h1>
+                <p class="site-description">
+                    Café ludoteca: gestión de préstamos de juegos
+                </p>
             </div>
         </div>
     </header>
 
     <main id="site-main" class="site-main outer" role="main">
         <div class="inner">
+
+            <div class="proyecto-content">
+
+                <!-- ===================== DESCRIPCIÓN ===================== -->
+                <section class="proyecto-intro">
+                    <h2>Sobre el proyecto</h2>
+                    <p>
+                        El proyecto es un <strong>café tipo ludoteca</strong>, un lugar donde las personas
+                        van a tomar algo y a jugar. El sistema se encarga de gestionar el
+                        <strong>préstamo de juegos de mesa</strong> según la mesa que ocupa cada cliente,
+                        y de llevar el control del <strong>inventario</strong> para saber qué juegos están
+                        disponibles, cuáles están prestados y cuáles no se pueden usar.
+                    </p>
+                </section>
+
+                <!-- ===================== OBJETIVOS ===================== -->
+                <section class="proyecto-objetivos">
+                    <h2>Objetivos</h2>
+
+                    <details class="proyecto-details">
+                        <summary>Ver objetivos específicos</summary>
+                        <ol>
+                            <li>Identificar qué necesita el café para controlar el préstamo de sus juegos.</li>
+                            <li>Diseñar el modelo entidad-relación con las mesas, los juegos, los clientes y los préstamos.</li>
+                            <li>Transformar el modelo entidad-relación en un modelo relacional listo para implementar.</li>
+                            <li>Controlar el inventario para saber qué juegos están disponibles, prestados o en mal estado.</li>
+                            <li>Registrar cada préstamo con su mesa, su fecha y su hora de salida y devolución.</li>
+                            <li>Implementar la base de datos y comprobar que funciona con consultas de prueba.</li>
+                        </ol>
+                    </details>
+                </section>
+
+                <!-- ===================== QUÉ ES UN DIAGRAMA TRANSFORMADO ===================== -->
+                <section class="proyecto-card">
+                    <h2>¿Qué es un diagrama transformado?</h2>
+                    <p>
+                        Primero se dibuja el modelo entidad-relación, que muestra las cosas del negocio
+                        (por ejemplo juegos, mesas y clientes) y cómo se conectan entre sí.
+                    </p>
+                    <p>
+                        El <strong>diagrama transformado</strong> es ese mismo modelo, pero convertido a
+                        <strong>tablas</strong>, que es la forma en que realmente se guarda la información
+                        en una base de datos. Es como pasar un plano a una lista de materiales: ya no
+                        decimos qué ideas existen, sino dónde se va a guardar cada dato.
+                    </p>
+                    <p>
+                        La regla básica es simple: cada entidad se vuelve una tabla, cada atributo se vuelve
+                        una columna y cada relación se resuelve con llaves o con una tabla nueva.
+                    </p>
+                </section>
+
+                <!-- ===================== DIAGRAMA ===================== -->
+                <section class="proyecto-card">
+                    <h2>Diagrama del proyecto</h2>
+
+                    <div class="proyecto-diagrama">
+                        <iframe
+                            src={DIAGRAM_URL}
+                            title="Diagrama transformado del proyecto"
+                            loading="lazy"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+
+                    <a
+                        class="proyecto-link"
+                        href={DIAGRAM_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Abrir el diagrama en una pestaña nueva
+                    </a>
+                </section>
+
+                <!-- ===================== PARTES DEL DIAGRAMA ===================== -->
+                <section class="proyecto-card">
+                    <h2>Partes del diagrama</h2>
+
+                    <div class="proyecto-partes">
+                        <div class="proyecto-parte">
+                            <h3>Tablas</h3>
+                            <p>Son los cuadros grandes. Cada una guarda un tipo de información, como los juegos, las mesas o los préstamos.</p>
+                        </div>
+
+                        <div class="proyecto-parte">
+                            <h3>Columnas</h3>
+                            <p>Son los datos dentro de cada tabla, por ejemplo el nombre de un juego o la fecha de un préstamo.</p>
+                        </div>
+
+                        <div class="proyecto-parte">
+                            <h3>Llave primaria (PK)</h3>
+                            <p>Es la columna que identifica cada fila de forma única, como un número de cédula. No se puede repetir.</p>
+                        </div>
+
+                        <div class="proyecto-parte">
+                            <h3>Llave foránea (FK)</h3>
+                            <p>Es una columna que apunta a la llave primaria de otra tabla. Así es como una tabla se conecta con otra.</p>
+                        </div>
+
+                        <div class="proyecto-parte">
+                            <h3>Líneas de relación</h3>
+                            <p>Las líneas entre tablas muestran qué tablas están conectadas y cuántos registros de una pueden asociarse con la otra (uno a muchos, muchos a muchos).</p>
+                        </div>
+
+                        <div class="proyecto-parte">
+                            <h3>Tabla intermedia</h3>
+                            <p>Cuando dos tablas se relacionan de muchos a muchos, se crea una tabla en medio que une a las dos y guarda los datos de esa unión.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
         </div>
     </main>
 </Layout>
