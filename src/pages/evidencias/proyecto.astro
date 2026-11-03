@@ -88,24 +88,23 @@ const DIAGRAM_URL =
                     </a>
                 </section>
 
-                <!-- ===================== QUÉ ES UN DIAGRAMA TRANSFORMADO ===================== -->
-                <section class="proyecto-card">
-                    <h2>¿Qué es un diagrama transformado?</h2>
-                    <p>
-                        El <strong>diagrama transformado</strong> es el MER convertido a
-                        <strong>tablas</strong>, que es la forma en que realmente se guarda la información
-                        en una base de datos. Es como pasar un plano a una lista de materiales: ya no
-                        decimos qué ideas existen, sino dónde se va a guardar cada dato.
-                    </p>
-                    <p>
-                        La regla básica es simple: cada entidad se vuelve una tabla, cada atributo se vuelve
-                        una columna y cada relación se resuelve con llaves o con una tabla nueva.
-                    </p>
-                </section>
-
                 <!-- ===================== DIAGRAMA TRANSFORMADO ===================== -->
                 <section class="proyecto-card">
-                    <h2>Diagrama transformado del proyecto</h2>
+                    <h2>Diagrama transformado</h2>
+                    <p>
+                        El diagrama transformado es el MER convertido a <strong>tablas</strong>, que es como
+                        realmente se guarda la información en la base de datos. Así fue como pasamos de
+                        uno al otro:
+                    </p>
+
+                    <ol class="proyecto-pasos">
+                        <li><strong>Cada entidad se volvió una tabla.</strong> Mesa, juego, cliente y préstamo pasaron de ser cuadros en el MER a tablas con su propio nombre.</li>
+                        <li><strong>Cada atributo se volvió una columna.</strong> Por ejemplo, el nombre de un juego o la fecha de un préstamo quedaron como columnas dentro de su tabla.</li>
+                        <li><strong>El identificador de cada entidad se volvió la llave primaria.</strong> Es el dato que no se repite y sirve para reconocer cada registro.</li>
+                        <li><strong>Las relaciones de uno a muchos se resolvieron con llaves foráneas.</strong> La llave primaria del lado "uno" se copia como columna en la tabla del lado "muchos" para conectarlas.</li>
+                        <li><strong>Las relaciones de muchos a muchos se convirtieron en una tabla intermedia.</strong> Esa tabla une a las otras dos y guarda los datos propios de la relación, como la fecha del préstamo.</li>
+                        <li><strong>Los atributos con varios valores pasaron a una tabla aparte</strong>, para que cada dato quede en su propia fila.</li>
+                    </ol>
 
                     <div class="proyecto-diagrama">
                         <iframe
@@ -163,17 +162,31 @@ const DIAGRAM_URL =
                     </div>
                 </section>
 
-                <!-- ===================== APRENDIZAJES ===================== -->
+                <!-- ===================== APRENDIZAJES / CONCLUSIÓN ===================== -->
                 <section class="proyecto-card">
                     <h2>Aprendizajes del proyecto</h2>
 
-                    <ul class="proyecto-aprendizajes">
-                        <li><strong>Modelar antes de construir:</strong> dibujar el MER primero ayuda a entender el negocio y evita errores en la base de datos.</li>
-                        <li><strong>Pasar del MER a tablas:</strong> aprendí cómo cada entidad, atributo y relación se convierte en tablas, columnas y llaves.</li>
-                        <li><strong>Importancia de las llaves:</strong> las llaves primarias y foráneas son las que mantienen los datos ordenados y conectados.</li>
-                        <li><strong>Control del inventario:</strong> llevar el estado de cada juego permite saber en todo momento qué hay disponible.</li>
-                        <li><strong>Trabajo en equipo:</strong> escribe aquí lo que aprendiste al trabajar con tus compañeros.</li>
-                    </ul>
+                    <p>
+                        Antes de este proyecto pensaba que una base de datos era simplemente guardar
+                        información en tablas. Ahora entiendo que lo más importante pasa antes: pensar
+                        bien cómo funciona el negocio. Al modelar el café ludoteca me di cuenta de que
+                        preguntas tan simples como "¿qué mesa tiene prestado este juego?" o "¿cuántas
+                        copias quedan disponibles?" dependen de que el diseño esté bien hecho desde el
+                        principio.
+                    </p>
+
+                    <p>
+                        Lo que más me costó fue pasar del MER al diagrama transformado, sobre todo
+                        decidir dónde van las llaves y cuándo hace falta una tabla intermedia. Pero
+                        también fue lo que más me ayudó a entender el tema, porque dejó de ser una teoría
+                        y empezó a tener sentido con un ejemplo real.
+                    </p>
+
+                    <p>
+                        Me llevo la idea de que modelar no es un paso aburrido que hay que cumplir, sino
+                        lo que evita errores más adelante. Un buen modelo ahorra tiempo y hace que el
+                        sistema sea más fácil de usar y de mantener.
+                    </p>
                 </section>
 
             </div>
