@@ -1,6 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import SiteNav from '../../components/SiteNav.astro';
+import { getAssetUrl } from '../../config';
+
+// Excel de la normalización (guárdalo en public/assets/files/)
+const NORMALIZACION_URL = getAssetUrl('/assets/files/Normalizacion_Cafe_y_Ludoteca.xlsx');
 
 // Diagrama MER (modelo entidad-relación)
 const MER_VIEW_URL =
@@ -160,6 +164,26 @@ const DIAGRAM_URL =
                             <p>Cuando dos tablas se relacionan de muchos a muchos, se crea una tabla en medio que une a las dos y guarda los datos de esa unión.</p>
                         </details>
                     </div>
+                </section>
+
+                <!-- ===================== NORMALIZACIÓN ===================== -->
+                <section class="proyecto-card">
+                    <h2>Normalización de las tablas</h2>
+                    <p>
+                        La normalización es el último paso para dejar las tablas ordenadas y sin datos
+                        repetidos. Revisamos cada una de las <strong>18 tablas</strong> del proyecto con tres
+                        reglas sencillas: que cada celda guarde un solo dato, que cada dato dependa de la
+                        llave completa y que no dependa de otro dato que no sea la llave. En el Excel se ve,
+                        tabla por tabla, su estructura, unas filas de ejemplo y por qué cumple cada regla.
+                    </p>
+
+                    <a
+                        class="proyecto-link"
+                        href={NORMALIZACION_URL}
+                        download="Normalizacion_Cafe_y_Ludoteca.xlsx"
+                    >
+                        Descargar el Excel de normalización
+                    </a>
                 </section>
 
                 <!-- ===================== APRENDIZAJES / CONCLUSIÓN ===================== -->
