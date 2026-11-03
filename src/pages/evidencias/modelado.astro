@@ -1,4 +1,5 @@
 ---
+---
 import Layout from '../../layouts/Layout.astro';
 import SiteNav from '../../components/SiteNav.astro';
 import { getAssetUrl } from '../../config';
@@ -15,6 +16,9 @@ const DRAWIO_LINK = 'PEGA_AQUI_EL_LINK_DE_DRAWIO';
 
             <div class="site-header-content">
                 <h1 class="site-title">Modelado</h1>
+                <p class="site-description">
+                    Ejercicios de modelo entidad-relación
+                </p>
             </div>
         </div>
     </header>
@@ -22,13 +26,52 @@ const DRAWIO_LINK = 'PEGA_AQUI_EL_LINK_DE_DRAWIO';
     <main id="site-main" class="site-main outer" role="main">
         <div class="inner">
 
+            <!-- ===================== EJERCICIO 1 (primer ejercicio en clase) ===================== -->
             <div class="modelado-content">
 
+                <section class="modelado-intro">
+                    <h2>Ejercicio 1: Entendiendo el modelo Entidad-Relación</h2>
+                    <p>
+                        Este fue el primer ejercicio realizado en clase para comprender
+                        el modelo entidad-relación. El objetivo era representar un torneo
+                        deportivo, identificando sus entidades, atributos y relaciones.
+                    </p>
+                </section>
+
                 <img
-                    src="/assets/images/modeladoRelacionEntidad.png"
-                    alt="Modelo entidad-relación"
+                    src={getAssetUrl('/assets/images/modeladoRelacionEntidad.png')}
+                    alt="Diagrama entidad-relación del torneo: Tabla, Equipo, Jugador y Partido"
                     class="modelado-image"
                 />
+
+                <section class="modelado-justificacion">
+                    <h2>Justificación del modelo</h2>
+
+                    <h3>Entidades</h3>
+                    <ul>
+                        <li><strong>Tabla:</strong> guarda la posición y los puntos de cada equipo en el torneo.</li>
+                        <li><strong>Equipo:</strong> es el centro del modelo; tiene nombre, indumentaria y número de integrantes.</li>
+                        <li><strong>Jugador:</strong> se identifica por su documento (CC o TD) y guarda su programa académico y semestre.</li>
+                        <li><strong>Partido:</strong> registra la fecha, la hora y la cancha donde se juega.</li>
+                    </ul>
+
+                    <h3>Relaciones</h3>
+                    <ul>
+                        <li>
+                            <strong>Posicionar (1:M):</strong> una posición de la tabla corresponde a un equipo,
+                            y cada equipo aparece en la tabla de posiciones.
+                        </li>
+                        <li>
+                            <strong>Pertenecer (1:M):</strong> un equipo tiene varios jugadores,
+                            pero cada jugador pertenece a un solo equipo.
+                        </li>
+                        <li>
+                            <strong>Jugar (M:N):</strong> un equipo juega varios partidos y en cada partido
+                            participan varios equipos. Esta relación tiene el atributo multivalorado
+                            <em>tarjeta</em>, porque un equipo puede recibir varias tarjetas en un mismo partido.
+                        </li>
+                    </ul>
+                </section>
 
             </div>
 
@@ -43,13 +86,12 @@ const DRAWIO_LINK = 'PEGA_AQUI_EL_LINK_DE_DRAWIO';
                         <h3 class="quiz-card-title">Quiz de la Mañana · Ejercicio 1</h3>
                         <p class="quiz-card-subtitle">Taller mecánico</p>
 
-                            <img
-                                src={getAssetUrl('/assets/images/Quiz 2.1.png')}
-                                alt="Modelo entidad-relación: Cliente registra Vehículo; Mecánico repara Vehículo"
-                                class="quiz-card-img"
-                                loading="lazy"
-                            />
-                        
+                        <img
+                            src={getAssetUrl('/assets/images/Quiz 2.1.png')}
+                            alt="Modelo entidad-relación: Cliente registra Vehículo; Mecánico repara Vehículo"
+                            class="quiz-card-img"
+                            loading="lazy"
+                        />
 
                         <div class="quiz-cell">
                             <h4>Entidades y atributos</h4>
@@ -74,13 +116,12 @@ const DRAWIO_LINK = 'PEGA_AQUI_EL_LINK_DE_DRAWIO';
                         <h3 class="quiz-card-title">Quiz de la Mañana · Ejercicio 2</h3>
                         <p class="quiz-card-subtitle">Préstamo de equipos</p>
 
-                            <img
-                                src={getAssetUrl('/assets/images/Quiz 2.png')}
-                                alt="Modelo entidad-relación: Equipo posee Unidad física; Usuario presta Unidad física"
-                                class="quiz-card-img"
-                                loading="lazy"
-                            />
-                    
+                        <img
+                            src={getAssetUrl('/assets/images/Quiz 2.png')}
+                            alt="Modelo entidad-relación: Equipo posee Unidad física; Usuario presta Unidad física"
+                            class="quiz-card-img"
+                            loading="lazy"
+                        />
 
                         <div class="quiz-cell">
                             <h4>Entidades y atributos</h4>
