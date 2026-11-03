@@ -1,6 +1,10 @@
 ---
+i---
 import Layout from '../../layouts/Layout.astro';
 import SiteNav from '../../components/SiteNav.astro';
+
+// Pega aquí el link de Draw.io para "Nuevos ejercicios"
+const DRAWIO_LINK = 'PEGA_AQUI_EL_LINK_DE_DRAWIO';
 ---
 
 <Layout title="Modelado">
@@ -27,6 +31,91 @@ import SiteNav from '../../components/SiteNav.astro';
                 />
 
             </div>
+
+            <!-- ===================== QUIZ 1 (grupo de la mañana) ===================== -->
+            <section class="quiz-section" id="quiz-1-manana">
+                <h2 class="quiz-title">Quiz 1 · Grupo de la mañana</h2>
+
+                <div class="quiz-grid">
+
+                    <!-- ============ EJERCICIO 1 ============ -->
+                    <article class="quiz-card">
+                        <h3>Ejercicio 1: Taller mecánico</h3>
+
+                        <a href="/assets/images/quiz1-ejercicio1.png" target="_blank" rel="noopener noreferrer">
+                            <img
+                                src="/assets/images/quiz1-ejercicio1.png"
+                                alt="Modelo entidad-relación: Cliente registra Vehículo; Mecánico repara Vehículo"
+                                class="quiz-card-img"
+                                loading="lazy"
+                            />
+                        </a>
+
+                        <div class="quiz-cell">
+                            <h4>Entidades y atributos</h4>
+                            <ul>
+                                <li><strong>CLIENTE:</strong> <u>cédula</u> (identificador), nombre (compuesto: nombre y apellido), dirección y correo de contacto (multivaluado, puede tener varios).</li>
+                                <li><strong>VEHÍCULO:</strong> <u>placa</u> (identificador), marca, línea, año de fabricación y antigüedad (derivado: se calcula con el año de fabricación).</li>
+                                <li><strong>MECÁNICO:</strong> <u>id_mecánico</u> (identificador), nombre y especialidad (multivaluado).</li>
+                            </ul>
+                        </div>
+
+                        <div class="quiz-cell">
+                            <h4>Relaciones</h4>
+                            <ul>
+                                <li><strong>Registrar (1:M):</strong> un cliente registra de 0 a muchos vehículos (0,M) y cada vehículo pertenece a un solo cliente (1,1).</li>
+                                <li><strong>Reparar (M:N):</strong> un vehículo puede ser reparado por varios mecánicos y un mecánico repara varios vehículos. Guarda <em>fecha</em>, <em>descripción de la falla</em> y <em>fecha del último ingreso</em>.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- ============ EJERCICIO 2 ============ -->
+                    <article class="quiz-card">
+                        <h3>Ejercicio 2: Préstamo de equipos</h3>
+
+                        <a href="/assets/images/quiz1-ejercicio2.png" target="_blank" rel="noopener noreferrer">
+                            <img
+                                src="/assets/images/quiz1-ejercicio2.png"
+                                alt="Modelo entidad-relación: Equipo posee Unidad física; Usuario presta Unidad física"
+                                class="quiz-card-img"
+                                loading="lazy"
+                            />
+                        </a>
+
+                        <div class="quiz-cell">
+                            <h4>Entidades y atributos</h4>
+                            <ul>
+                                <li><strong>EQUIPO:</strong> <u>código de referencia</u> (identificador), nombre, año de lanzamiento y proveedor (multivaluado).</li>
+                                <li><strong>UNIDAD FÍSICA</strong> (entidad débil): <u>número de referencia</u> (identificador parcial) y estado. Depende de un equipo para existir.</li>
+                                <li><strong>USUARIO:</strong> <u>código institucional</u> (identificador), nombre (compuesto: primer y segundo nombre, primer y segundo apellido) y dependencia.</li>
+                            </ul>
+                        </div>
+
+                        <div class="quiz-cell">
+                            <h4>Relaciones</h4>
+                            <ul>
+                                <li><strong>Reemplazar (1:1):</strong> un equipo puede ser el reemplazo de otro (0,1) y ser reemplazado por otro (0,1).</li>
+                                <li><strong>Poseer (1:M, identificadora):</strong> un equipo tiene una o muchas unidades físicas (1,M) y cada unidad pertenece a un solo equipo (1,1).</li>
+                                <li><strong>Prestar (M:N):</strong> una unidad puede prestarse a varios usuarios (0,M) y un usuario puede pedir varias unidades (0,M). Guarda <em>fecha de salida</em>, <em>fecha pactada</em> y <em>días de mora</em> (derivado: fecha pactada frente a la entrega).</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                </div>
+
+                <div class="quiz-nuevos">
+                    <h3>Nuevos ejercicios</h3>
+                    <p>Aquí se irán agregando los ejercicios que vayan enviando.</p>
+                    <a
+                        class="quiz-nuevos-link"
+                        href={DRAWIO_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Ver diagrama en Draw.io
+                    </a>
+                </div>
+            </section>
 
         </div>
     </main>

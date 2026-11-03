@@ -627,3 +627,106 @@ h6 {
     display: block;
     margin: 30px auto;
 }
+
+/* =========================================================
+   Quiz 1 - matriz de ejercicios
+   ========================================================= */
+
+.quiz-section {
+    max-width: 1100px;
+    margin: 60px auto;
+}
+
+.quiz-title {
+    margin-top: 0;
+    color: var(--darkgrey);
+    font-size: 3rem;
+}
+
+.quiz-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 30px 0;
+    align-items: start;
+}
+
+.quiz-card {
+    padding: 24px;
+    background: #fff;
+    border: 1px solid var(--whitegrey);
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.quiz-card h3 {
+    margin-top: 0;
+    color: var(--darkgrey);
+    font-size: 2rem;
+}
+
+.quiz-card-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--whitegrey);
+    border-radius: 4px;
+}
+
+.quiz-cell {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: #f7fafc;
+    border-left: 4px solid var(--blue);
+    border-radius: 3px;
+}
+
+.quiz-cell h4 {
+    margin: 0 0 8px;
+    color: var(--blue);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.quiz-cell ul {
+    margin: 0;
+    padding-left: 1.2em;
+}
+
+.quiz-cell li {
+    margin: 0.4em 0;
+    font-size: 1.4rem;
+    line-height: 1.5em;
+}
+
+.quiz-nuevos {
+    margin-top: 40px;
+    padding: 24px;
+    border-top: 1px solid var(--whitegrey);
+}
+
+.quiz-nuevos h3 {
+    margin-top: 0;
+    color: var(--blue);
+    font-size: 2rem;
+}
+
+.quiz-nuevos-link {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    background: var(--blue);
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+.quiz-nuevos-link:hover {
+    background: #22a3eb;
+    text-decoration: none;
+}
+
+@media (max-width: 800px) {
+    .quiz-grid {
+        grid-template-columns: 1fr;
+    }
+}
