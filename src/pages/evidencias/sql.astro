@@ -1,6 +1,4 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import SiteNav from '../../components/SiteNav.astro';
 import { getAssetUrl } from '../../config';
@@ -230,16 +228,6 @@ const grupos = [
     },
 ];
 
-// Lee el contenido de cada archivo en tiempo de compilación para la vista previa
-const leerSql = (archivo: string): string => {
-    try {
-        return fs.readFileSync(path.join(process.cwd(), 'public', SQL_DIR, archivo), 'utf-8').trim();
-    } catch {
-        return '-- No se pudo cargar la vista previa. Descarga el archivo para verlo.';
-    }
-};
-
-const totalScripts = grupos.reduce((n, g) => n + g.scripts.length, 0);
 ---
 
 <Layout title="Scripts SQL">
@@ -259,33 +247,6 @@ const totalScripts = grupos.reduce((n, g) => n + g.scripts.length, 0);
         <div class="inner">
 
             <div class="proyecto-content">
-
-                <!-- ===================== INTRODUCCIÓN ===================== -->
-                <section class="proyecto-intro">
-                    <h2>Sobre los scripts</h2>
-                    <p>
-                        Estos son los <strong>{totalScripts} scripts SQL</strong> con los que se comprobó que la base
-                        de datos funciona. Cada uno responde una pregunta real del café: qué juegos admiten
-                        cierta cantidad de jugadores, qué mesas están libres, cuántas copias de un juego
-                        quedan o qué se ha prestado y a quién.
-                    </p>
-                    <p>
-                        De cada script puedes <strong>ver el código</strong> en la misma página, leer su
-                        <strong>descripción</strong> y su <strong>idea central</strong>, y
-                        <strong>descargar el archivo .sql</strong> para ejecutarlo en MySQL.
-                    </p>
-                </section>
-
-                <!-- ===================== CÓMO EJECUTARLOS ===================== -->
-                <section class="proyecto-card">
-                    <h2>Cómo ejecutarlos</h2>
-                    <ol class="proyecto-pasos">
-                        <li><strong>Crea y llena la base de datos</strong> <code>proyecto_db1</code> con el script de creación del proyecto.</li>
-                        <li><strong>Descarga el script</strong> que quieras probar.</li>
-                        <li><strong>Ábrelo en MySQL Workbench</strong> (o ejecútalo con <code>mysql &lt; archivo.sql</code>).</li>
-                        <li><strong>Cambia los valores de prueba</strong> en las líneas <code>SET @variable = ...</code> para consultar otros datos.</li>
-                    </ol>
-                </section>
 
                 <!-- ===================== ÍNDICE ===================== -->
                 <section class="proyecto-card">
@@ -332,11 +293,6 @@ const totalScripts = grupos.reduce((n, g) => n + g.scripts.length, 0);
                                     <span class="sql-etiquetas-titulo">Conceptos:</span>
                                     {s.conceptos.map((c) => <span class="sql-etiqueta sql-etiqueta-alt">{c}</span>)}
                                 </div>
-
-                                <details class="proyecto-parte">
-                                    <summary>Ver código</summary>
-                                    <pre class="sql-codigo"><code>{leerSql(s.archivo)}</code></pre>
-                                </details>
 
                                 <a
                                     class="proyecto-link"
