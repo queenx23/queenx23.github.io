@@ -295,7 +295,8 @@ h3, h4, h5, h6 { font-weight: 500; }
 
 /* Tarjeta blanca */
 .quiz-card,
-.proyecto-card {
+.proyecto-card,
+.norm-details {
     background: #fff;
     color: #3b474c;
     border: 1px solid var(--whitegrey);
@@ -458,6 +459,42 @@ h3, h4, h5, h6 { font-weight: 500; }
 }
 
 /* ==========================================================================
+   Normalización
+   ========================================================================== */
+
+.norm-section { max-width: 1000px; margin: 40px auto 60px; }
+.norm-title { margin-top: 0; color: var(--darkgrey); font-size: 3rem; }
+.norm-subtitle { margin: 50px 0 6px; color: var(--darkgrey); font-size: 2.2rem; }
+.norm-hint { margin: 0 0 10px; color: var(--midgrey); font-size: 1.4rem; }
+.norm-caso { margin: 28px 0 10px; color: var(--blue); font-size: 1.8rem; }
+
+.norm-section .quiz-cell p { margin: 0 0 8px; font-size: 1.4rem; line-height: 1.5em; }
+
+.norm-casos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 20px; }
+
+/* Justificaciones desplegables */
+.norm-details { margin-bottom: 10px; }
+.norm-details summary { padding: 14px 18px; color: var(--darkgrey); font-size: 1.5rem; font-weight: 600; cursor: pointer; }
+.norm-details summary:hover { color: var(--blue); }
+.norm-details[open] summary { border-bottom: 1px solid var(--whitegrey); color: var(--blue); }
+
+.norm-body { padding: 14px 18px 6px; color: #3b474c; }
+.norm-body p { margin: 0 0 10px; font-size: 1.4rem; line-height: 1.5em; }
+.norm-body ul { margin: 0 0 10px; }
+.norm-body li { margin: 0.4em 0; color: #3b474c; font-size: 1.4rem; line-height: 1.5em; }
+.norm-body code { padding: 2px 5px; background: #f1f5f8; border-radius: 3px; font-size: 1.25rem; word-break: break-word; }
+
+/* Visor del PDF */
+.norm-pdf-frame { display: block; width: 100%; height: 800px; margin-top: 12px; border: 1px solid var(--whitegrey); border-radius: 4px; background: #fff; }
+.norm-pdf-links,
+.norm-ref { margin-top: 10px; font-size: 1.3rem; }
+
+@media (max-width: 800px) {
+    .norm-casos { grid-template-columns: 1fr; }
+    .norm-pdf-frame { height: 500px; }
+}
+
+/* ==========================================================================
    Modo oscuro: texto que queda fuera de las tarjetas
    ========================================================================== */
 
@@ -467,6 +504,8 @@ html.dark-mode .modelado-intro h2,
 html.dark-mode .modelado-intro p,
 html.dark-mode .proyecto-intro h2,
 html.dark-mode .proyecto-objetivos h2,
-html.dark-mode .proyecto-intro p { color: #fff; }
+html.dark-mode .proyecto-intro p,
+html.dark-mode .norm-title,
+html.dark-mode .norm-subtitle { color: #fff; }
 
 html.dark-mode .quiz-nuevos { border-top-color: #3a4147; }

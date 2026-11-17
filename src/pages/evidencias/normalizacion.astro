@@ -1,6 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import SiteNav from '../../components/SiteNav.astro';
+import { getAssetUrl } from '../../config';
+
+const PDF_URL = getAssetUrl('/assets/docs/Taller-Normalizacion.pdf');
 ---
 
 <Layout title="Normalización">
@@ -15,6 +18,205 @@ import SiteNav from '../../components/SiteNav.astro';
 
     <main id="site-main" class="site-main outer" role="main">
         <div class="inner">
+
+            <section class="norm-section">
+
+                <!-- ============ ENCABEZADO ============ -->
+                <h2 class="norm-title">Taller 2: Normalización</h2>
+
+                <div class="quiz-cell">
+                    <h4>Qué se espera del taller</h4>
+                    <p>Analizar tres contextos empresariales y, en cada uno, detectar problemas de diseño en una tabla para corregirlos aplicando las formas normales (1FN, 2FN y 3FN). Para cada caso se pide:</p>
+                    <ul>
+                        <li>Enumerar las <strong>dependencias funcionales</strong> y explicar por qué existen.</li>
+                        <li>Identificar en qué <strong>forma normal</strong> está el esquema y por qué.</li>
+                        <li>Describir las <strong>anomalías</strong> de inserción, actualización y eliminación.</li>
+                        <li>Proponer el <strong>esquema normalizado</strong> y justificar los cambios.</li>
+                    </ul>
+                </div>
+
+                <div class="norm-casos">
+                    <div class="quiz-cell">
+                        <h4>Caso 1: Hospital</h4>
+                        <p>Pacientes hospitalizados, médicos, especialidades y camas. Se normaliza hasta 3FN.</p>
+                    </div>
+                    <div class="quiz-cell">
+                        <h4>Caso 2: Clientes-Productos</h4>
+                        <p>Pedidos de clientes con productos y vendedores. Se detectan dependencias parciales y transitivas.</p>
+                    </div>
+                    <div class="quiz-cell">
+                        <h4>Caso 3: Empleado-Idiomas</h4>
+                        <p>Empleados con varias competencias e idiomas. Se lleva a 1FN y se compara con guardar todo en una columna.</p>
+                    </div>
+                </div>
+
+                <!-- ============ JUSTIFICACIONES (DESPLEGABLES) ============ -->
+                <h3 class="norm-subtitle">Justificación por caso</h3>
+                <p class="norm-hint">Haz clic en cada punto para ver la explicación.</p>
+
+                <h4 class="norm-caso">Caso 1: Hospital</h4>
+
+                <details class="norm-details" open>
+                    <summary>Dependencias funcionales</summary>
+                    <div class="norm-body">
+                        <p>Esquema inicial: <code>(ID_Paciente, Nombre_Paciente, Especialidad_Tratamiento, Cama_Asignada, Ala_Hospital, Médico_Tratante, Teléfono_Médico, Email_Médico, Fecha_Ingreso, Fecha_Alta)</code></p>
+                        <ul>
+                            <li><strong>ID_Paciente → </strong> nombre, especialidad, cama, ala, médico tratante, fecha de ingreso y fecha de alta: el identificador permite encontrar todos los datos del paciente.</li>
+                            <li><strong>Médico_Tratante → Email_Médico, Teléfono_Médico:</strong> se asume un correo y un teléfono únicos por médico.</li>
+                            <li><strong>Cama_Asignada → Ala_Hospital:</strong> cada cama está en una sola ala.</li>
+                            <li><strong>Especialidad_Tratamiento → Ala_Hospital NO se cumple:</strong> una especialidad se presta en varias alas y las interconsultas llevan una especialidad a cualquier ala.</li>
+                        </ul>
+                        <p>Se asumió que un ID_Paciente identifica un único registro de ingreso y alta, porque el enunciado no incluye otro identificador.</p>
+                    </div>
+                </details>
+
+                <details class="norm-details">
+                    <summary>Forma normal en la que se encuentra</summary>
+                    <div class="norm-body">
+                        <ul>
+                            <li><strong>1FN:</strong> sí cumple. Todos los valores son atómicos, no hay grupos repetidos ni atributos multivaluados.</li>
+                            <li><strong>2FN:</strong> sí cumple. La clave primaria es un solo atributo (ID_Paciente), por lo que no hay dependencias parciales.</li>
+                            <li><strong>3FN:</strong> no cumple. Hay dependencias transitivas: ID_Paciente → Médico_Tratante → Email y Teléfono del médico, e ID_Paciente → Cama_Asignada → Ala_Hospital.</li>
+                        </ul>
+                        <p>Conclusión: el esquema está solo en 2FN.</p>
+                    </div>
+                </details>
+
+                <details class="norm-details">
+                    <summary>Anomalías (inserción, actualización y eliminación)</summary>
+                    <div class="norm-body">
+                        <ul>
+                            <li><strong>Inserción:</strong> no se puede registrar un médico nuevo (correo y teléfono) si no tiene una hospitalización asociada.</li>
+                            <li><strong>Actualización:</strong> si cambia el teléfono de un médico que atendió 100 pacientes, hay que modificar 100 registros; si se omite alguno quedan datos inconsistentes.</li>
+                            <li><strong>Eliminación:</strong> si un médico renuncia o se borra una hospitalización, se pierden los datos del médico asociados a las hospitalizaciones previas.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="norm-details">
+                    <summary>Esquema normalizado y justificación</summary>
+                    <div class="norm-body">
+                        <p><strong>Por qué se agrega ID_Hospitalización:</strong> un mismo paciente puede hospitalizarse varias veces, así que ID_Paciente no identifica cada hospitalización. La clave (ID_Paciente, Fecha_Ingreso) se descartó porque un paciente podría recibir el alta y reingresar el mismo día. También se agrega ID_Médico para poder registrar médicos de forma independiente.</p>
+                        <ul>
+                            <li><strong>HOSPITALIZACIÓN</strong> (ID_Hospitalización PK, ID_Paciente FK, Cama_Asignada FK, ID_Médico FK, Fecha_Ingreso, Fecha_Alta)</li>
+                            <li><strong>PACIENTE</strong> (ID_Paciente PK, Nombre_Paciente)</li>
+                            <li><strong>CAMA</strong> (Cama_Asignada PK, Ala_Hospital)</li>
+                            <li><strong>MÉDICO</strong> (ID_Médico PK, Médico_Tratante, Teléfono_Médico, Email_Médico)</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="norm-details">
+                    <summary>Puntos clave</summary>
+                    <div class="norm-body">
+                        <ul>
+                            <li>El esquema final queda en 3FN y desaparecen las anomalías de inserción, actualización y borrado.</li>
+                            <li>Buscar el teléfono de un médico ahora requiere consultar dos tablas (HOSPITALIZACIÓN y MÉDICO) por la llave foránea, pero se reduce la redundancia y se facilita el mantenimiento.</li>
+                            <li>Todos los determinantes son claves primarias de su tabla, por eso no es necesario llevarlo a BCNF.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <h4 class="norm-caso">Caso 2: Clientes-Productos</h4>
+
+                <details class="norm-details">
+                    <summary>Dependencias funcionales</summary>
+                    <div class="norm-body">
+                        <ul>
+                            <li><strong>ID_Pedido → Fecha_Pedido, ID_Cliente, ID_Vendedor:</strong> cada pedido tiene una fecha, un cliente y un vendedor.</li>
+                            <li><strong>ID_Cliente → Nombre_Cliente, Sector_Cliente:</strong> son datos propios del cliente.</li>
+                            <li><strong>ID_Producto → Nombre_Producto, Precio_Producto:</strong> son datos propios del producto.</li>
+                            <li><strong>ID_Vendedor → Nombre_Vendedor, Comisión_Vendedor:</strong> pertenecen al vendedor, no al pedido.</li>
+                            <li><strong>(ID_Pedido, ID_Producto) → Cantidad_Solicitada:</strong> la cantidad solo tiene sentido conociendo el pedido y el producto.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="norm-details">
+                    <summary>Forma normal y tipos de dependencia</summary>
+                    <div class="norm-body">
+                        <p>El esquema cumple 1FN (datos atómicos, sin grupos repetidos) pero <strong>viola 2FN</strong>, porque la clave es compuesta (ID_Pedido, ID_Producto) y hay atributos que dependen de solo una parte.</p>
+                        <ul>
+                            <li><strong>Total:</strong> Cantidad_Solicitada depende de toda la clave.</li>
+                            <li><strong>Parciales:</strong> Fecha_Pedido, ID_Cliente e ID_Vendedor dependen solo de ID_Pedido; Nombre_Producto y Precio_Producto dependen solo de ID_Producto.</li>
+                            <li><strong>Transitivas:</strong> ID_Pedido → ID_Cliente → Nombre y Sector del cliente; ID_Pedido → ID_Vendedor → Nombre y Comisión del vendedor.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="norm-details">
+                    <summary>Anomalía de actualización parcial</summary>
+                    <div class="norm-body">
+                        <p>Si cambia el nombre de un producto o el sector de un cliente, hay que actualizar todas las filas donde aparece ese ID, que en un historial de ventas pueden ser decenas, cientos o miles. Si la actualización se interrumpe (por ejemplo, por una pérdida de conexión), quedan datos contradictorios y reportes inconsistentes, además de un costo operativo alto.</p>
+                    </div>
+                </details>
+
+                <h4 class="norm-caso">Caso 3: Empleado-Idiomas</h4>
+
+                <details class="norm-details">
+                    <summary>¿Viola la 1FN? ¿Por qué?</summary>
+                    <div class="norm-body">
+                        <p>Sí. En <code>(ID_Empleado, Nombre_Empleado, Competencias_Técnicas, Idiomas)</code>, las columnas Competencias_Técnicas e Idiomas guardan varios valores en una misma celda (por ejemplo, "Python, Java, SQL"), y la 1FN exige un solo valor por campo.</p>
+                    </div>
+                </details>
+
+                <details class="norm-details">
+                    <summary>Normalización a 1FN (5 tablas)</summary>
+                    <div class="norm-body">
+                        <p>Se separan los atributos multivaluados en tablas independientes:</p>
+                        <ul>
+                            <li><strong>EMPLEADO:</strong> información principal del empleado.</li>
+                            <li><strong>COMPETENCIA:</strong> catálogo de competencias.</li>
+                            <li><strong>EMPLEADO_COMPETENCIA:</strong> tabla intermedia (relación muchos a muchos).</li>
+                            <li><strong>IDIOMA:</strong> catálogo de idiomas.</li>
+                            <li><strong>EMPLEADO_IDIOMA:</strong> tabla intermedia entre empleados e idiomas.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="norm-details">
+                    <summary>Consultas: empleados que saben Python</summary>
+                    <div class="norm-body">
+                        <ul>
+                            <li><strong>Solo Python:</strong> se consultan 3 tablas (EMPLEADO, EMPLEADO_COMPETENCIA y COMPETENCIA). La búsqueda es simple.</li>
+                            <li><strong>Python e inglés:</strong> se consultan 5 tablas, porque se combinan competencias e idiomas. Es más compleja.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="norm-details">
+                    <summary>Una columna de texto vs. varias tablas</summary>
+                    <div class="norm-body">
+                        <p><strong>Una sola columna de texto</strong></p>
+                        <ul>
+                            <li><em>Ventajas:</em> diseño más simple, menos tablas, útil cuando los datos solo se muestran y no se consultan.</li>
+                            <li><em>Desventajas:</em> no cumple 1FN, las búsquedas son complicadas, hay inconsistencias de escritura ("Python", "python", "PYTHON") y actualizar es difícil.</li>
+                        </ul>
+                        <p><strong>Modelo normalizado con varias tablas</strong></p>
+                        <ul>
+                            <li><em>Ventajas:</em> cumple 1FN, facilita las búsquedas, evita duplicidad e inconsistencias y permite agregar competencias o idiomas sin cambiar la estructura.</li>
+                            <li><em>Desventajas:</em> requiere más tablas y algunas consultas necesitan JOIN.</li>
+                        </ul>
+                        <p><strong>Conclusión del taller:</strong> si competencias e idiomas son datos que se consultan, conviene el modelo normalizado. La columna de texto solo sirve si la información es descriptiva y no requiere búsquedas ni filtros.</p>
+                    </div>
+                </details>
+
+                <!-- ============ VISOR DEL PDF ============ -->
+                <h3 class="norm-subtitle">Informe del taller (PDF)</h3>
+
+                <div class="norm-pdf">
+                    <iframe
+                        src={PDF_URL}
+                        title="Informe del taller de normalización"
+                        class="norm-pdf-frame"
+                    ></iframe>
+                    <p class="norm-pdf-links">Si el PDF no se muestra en tu navegador: <a href={PDF_URL} target="_blank" rel="noopener noreferrer">ábrelo en otra pestaña</a> o <a href={PDF_URL} download>descárgalo</a>.</p>
+                </div>
+
+                <p class="norm-ref">Referencia: Luque, I., Gómez-Nieto, M., López, E., &amp; Cerruela, G. (2001). <em>Bases de datos: Desde Chen hasta Codd con Oracle</em>. Alfaomega-RA-MA.</p>
+
+            </section>
+
         </div>
     </main>
 </Layout>
