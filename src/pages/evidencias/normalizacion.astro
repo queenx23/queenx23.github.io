@@ -1,214 +1,263 @@
-
 ---
-import { getAssetUrl } from '../../utils/assets';
+import Layout from '../../layouts/Layout.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import { getAssetUrl } from '../../config';
 
+// Archivos del taller (mismas rutas que ya tenías)
 const PDF_URL = getAssetUrl('/assets/images/BASES DE DATOS-TALLER_GrupoMSA.pdf');
 const EXCEL_URL = getAssetUrl('/assets/images/GrupoMSA_Casos.xlsx');
+
+// Formas normales (se renderizan con un .map para no repetir HTML)
+const formasNormales = [
+    {
+        nombre: 'Primera Forma Normal (1FN)',
+        regla:
+            'Cada atributo debe contener un único valor atómico. No se permiten grupos repetidos ni atributos con múltiples valores dentro de una misma celda.',
+        ejemplo:
+            'Un paciente con los teléfonos "3001234, 3109876" en una sola celda incumple 1FN. Se corrige guardando cada teléfono en su propia fila.',
+    },
+    {
+        nombre: 'Segunda Forma Normal (2FN)',
+        regla:
+            'Debe cumplir 1FN y todos los atributos que no forman parte de la clave deben depender de la clave primaria completa, evitando dependencias parciales.',
+        ejemplo:
+            'Si la clave es (id_compra, id_producto) y el nombre del producto depende solo de id_producto, hay dependencia parcial: ese dato va a la tabla Producto.',
+    },
+    {
+        nombre: 'Tercera Forma Normal (3FN)',
+        regla:
+            'Debe cumplir 2FN y eliminar las dependencias transitivas entre atributos que no son clave.',
+        ejemplo:
+            'Si una consulta guarda id_médico y también la especialidad del médico, la especialidad depende del médico y no de la consulta: se mueve a la tabla Médico.',
+    },
+    {
+        nombre: 'Forma Normal de Boyce-Codd (BCNF)',
+        regla:
+            'Es una versión más estricta de 3FN. Para cada dependencia funcional no trivial, el determinante debe ser una superclave.',
+        ejemplo:
+            'Si un atributo que no es clave determina a otro atributo, se separa en una tabla donde ese determinante sí sea la clave.',
+    },
+    {
+        nombre: 'Cuarta Forma Normal (4FN)',
+        regla:
+            'Debe cumplir BCNF y eliminar las dependencias multivaluadas independientes que generan redundancia en una relación.',
+        ejemplo:
+            'Un empleado con varios idiomas y varias certificaciones en la misma tabla obliga a repetir filas. Se separa en Empleado_Idioma y Empleado_Certificación.',
+    },
+];
+
+// Casos prácticos
+const casos = [
+    {
+        titulo: 'Caso 1: Hospital',
+        descripcion:
+            'Análisis de la información relacionada con pacientes, médicos, especialidades y consultas.',
+        texto:
+            'Se identifican los datos que deben almacenarse de forma independiente para evitar la repetición de información y establecer relaciones adecuadas entre las entidades.',
+        pasos: [
+            'Identificación de entidades y atributos.',
+            'Identificación de claves primarias y foráneas.',
+            'Separación de información repetitiva.',
+            'Organización de las relaciones entre tablas.',
+        ],
+        formas: '1FN, 2FN y 3FN',
+    },
+    {
+        titulo: 'Caso 2: Clientes y productos',
+        descripcion:
+            'Organización de la información de clientes, productos y sus respectivas transacciones.',
+        texto:
+            'Se separan los datos de los clientes y los productos de la información correspondiente a las compras, evitando almacenar varias veces los mismos datos.',
+        pasos: [
+            'Identificación de entidades independientes.',
+            'Definición de claves y dependencias funcionales.',
+            'Separación de las relaciones entre clientes y productos.',
+            'Reducción de redundancia.',
+        ],
+        formas: '2FN, 3FN y BCNF',
+    },
+    {
+        titulo: 'Caso 3: Empleados e idiomas',
+        descripcion:
+            'Tratamiento de los datos de empleados que pueden manejar varios idiomas.',
+        texto:
+            'Se identifica la dependencia multivaluada que aparece cuando un empleado puede tener asociados diferentes idiomas.',
+        pasos: [
+            'Identificación de atributos multivaluados.',
+            'Separación de empleados e idiomas.',
+            'Creación de una relación intermedia.',
+            'Aplicación de los principios de cuarta forma normal.',
+        ],
+        formas: 'BCNF y 4FN',
+    },
+];
 ---
 
-<main class="norm-section">
-  <h1 class="norm-title">Normalización de bases de datos</h1>
-
-  <p class="norm-hint">
-    Evidencia académica sobre el proceso de normalización, las formas normales
-    y la solución de casos prácticos mediante el diseño de bases de datos.
-  </p>
-
-  <h2 class="norm-subtitle">¿Qué es la normalización?</h2>
-
-  <div class="quiz-cell">
-    <p>
-      La normalización es un proceso que permite organizar los datos de una
-      base de datos para reducir la redundancia, evitar anomalías y mejorar
-      la integridad de la información. Para lograrlo, se aplican diferentes
-      formas normales que establecen reglas para estructurar las tablas y
-      sus relaciones.
-    </p>
-  </div>
-
-  <h2 class="norm-subtitle">Formas normales</h2>
-
-  <div class="quiz-cell">
-    <details class="norm-details">
-      <summary>Primera Forma Normal (1FN)</summary>
-      <div class="norm-body">
-        <p>
-          Cada atributo debe contener un único valor atómico. No se permiten
-          grupos repetidos ni atributos con múltiples valores dentro de una
-          misma celda.
-        </p>
-      </div>
-    </details>
-
-    <details class="norm-details">
-      <summary>Segunda Forma Normal (2FN)</summary>
-      <div class="norm-body">
-        <p>
-          Debe cumplir con la primera forma normal y todos los atributos que
-          no forman parte de una clave deben depender completamente de la
-          clave primaria, evitando dependencias parciales.
-        </p>
-      </div>
-    </details>
-
-    <details class="norm-details">
-      <summary>Tercera Forma Normal (3FN)</summary>
-      <div class="norm-body">
-        <p>
-          Debe cumplir con la segunda forma normal y eliminar las dependencias
-          transitivas entre atributos que no son clave.
-        </p>
-      </div>
-    </details>
-
-    <details class="norm-details">
-      <summary>Forma Normal de Boyce-Codd (BCNF)</summary>
-      <div class="norm-body">
-        <p>
-          Es una versión más estricta de la tercera forma normal. Para cada
-          dependencia funcional no trivial, el determinante debe ser una
-          superclave.
-        </p>
-      </div>
-    </details>
-
-    <details class="norm-details">
-      <summary>Cuarta Forma Normal (4FN)</summary>
-      <div class="norm-body">
-        <p>
-          Debe cumplir con BCNF y eliminar las dependencias multivaluadas
-          independientes que generan redundancia en una relación.
-        </p>
-      </div>
-    </details>
-  </div>
-
-  <h2 class="norm-subtitle">Desarrollo de casos prácticos</h2>
-
-  <p class="norm-hint">
-    Análisis de diferentes escenarios para identificar problemas de diseño
-    y aplicar las reglas de normalización.
-  </p>
-
-  <div class="norm-casos">
-    <section class="quiz-cell">
-      <h3 class="norm-caso">Caso 1: Hospital</h3>
-      <p>
-        Análisis de la información relacionada con pacientes, médicos,
-        especialidades y consultas.
-      </p>
-      <details class="norm-details">
-        <summary>Ver desarrollo</summary>
-        <div class="norm-body">
-          <p>
-            Se identifican los datos que deben almacenarse de forma
-            independiente para evitar la repetición de información y
-            establecer relaciones adecuadas entre las entidades.
-          </p>
-          <ul>
-            <li>Identificación de entidades y atributos.</li>
-            <li>Identificación de claves primarias y foráneas.</li>
-            <li>Separación de información repetitiva.</li>
-            <li>Organización de las relaciones entre tablas.</li>
-          </ul>
+<Layout title="Normalización">
+    <header class="site-header outer no-cover">
+        <div class="inner">
+            <SiteNav />
+            <div class="site-header-content">
+                <h1 class="site-title">Normalización de bases de datos</h1>
+                <p class="site-description">
+                    Formas normales y solución de casos prácticos · Taller Grupo MSA
+                </p>
+            </div>
         </div>
-      </details>
-    </section>
+    </header>
 
-    <section class="quiz-cell">
-      <h3 class="norm-caso">Caso 2: Clientes y productos</h3>
-      <p>
-        Organización de la información de clientes, productos y sus
-        respectivas transacciones.
-      </p>
-      <details class="norm-details">
-        <summary>Ver desarrollo</summary>
-        <div class="norm-body">
-          <p>
-            Se separan los datos de los clientes y los productos de la
-            información correspondiente a las compras, evitando almacenar
-            varias veces los mismos datos.
-          </p>
-          <ul>
-            <li>Identificación de entidades independientes.</li>
-            <li>Definición de claves y dependencias funcionales.</li>
-            <li>Separación de las relaciones entre clientes y productos.</li>
-            <li>Reducción de redundancia.</li>
-          </ul>
+    <main id="site-main" class="site-main outer" role="main">
+        <div class="inner">
+
+            <div class="proyecto-content">
+
+                <!-- ===================== INTRODUCCIÓN ===================== -->
+                <section class="proyecto-intro">
+                    <h2>¿Qué es la normalización?</h2>
+                    <p>
+                        La normalización es un proceso que permite <strong>organizar los datos</strong> de una
+                        base de datos para <strong>reducir la redundancia</strong>, evitar anomalías y mejorar
+                        la integridad de la información. Para lograrlo se aplican diferentes
+                        <strong>formas normales</strong>, que son reglas para estructurar las tablas y sus
+                        relaciones.
+                    </p>
+                    <p>
+                        Esta página reúne la evidencia académica del taller: la teoría de cada forma normal,
+                        el desarrollo de tres casos prácticos, el archivo de Excel de trabajo y el documento
+                        PDF original.
+                    </p>
+                </section>
+
+                <!-- ===================== OBJETIVOS ===================== -->
+                <section class="proyecto-objetivos">
+                    <h2>Objetivos</h2>
+
+                    <details class="proyecto-details">
+                        <summary>Ver objetivos específicos</summary>
+                        <ol>
+                            <li>Comprender para qué sirve la normalización y qué problemas evita.</li>
+                            <li>Aplicar las formas normales (1FN a 4FN) a tablas con datos repetidos.</li>
+                            <li>Identificar claves primarias, claves foráneas y dependencias funcionales.</li>
+                            <li>Resolver casos prácticos separando la información en tablas relacionadas.</li>
+                            <li>Documentar el desarrollo de cada caso en un archivo de Excel.</li>
+                        </ol>
+                    </details>
+                </section>
+
+                <!-- ===================== FORMAS NORMALES ===================== -->
+                <section class="proyecto-card">
+                    <h2>Formas normales</h2>
+                    <p>
+                        Cada forma normal incluye a la anterior: para estar en 3FN, una tabla primero debe
+                        estar en 2FN, y así sucesivamente. Despliega cada una para ver su regla y un ejemplo.
+                    </p>
+
+                    <div class="proyecto-partes">
+                        {formasNormales.map((fn) => (
+                            <details class="proyecto-parte">
+                                <summary>{fn.nombre}</summary>
+                                <p>{fn.regla}</p>
+                                <p><strong>Ejemplo:</strong> {fn.ejemplo}</p>
+                            </details>
+                        ))}
+                    </div>
+                </section>
+
+                <!-- ===================== CASOS PRÁCTICOS ===================== -->
+                <section class="proyecto-card">
+                    <h2>Desarrollo de casos prácticos</h2>
+                    <p>
+                        Análisis de diferentes escenarios para identificar problemas de diseño y aplicar las
+                        reglas de normalización.
+                    </p>
+
+                    <div class="proyecto-partes">
+                        {casos.map((caso) => (
+                            <details class="proyecto-parte">
+                                <summary>{caso.titulo}</summary>
+                                <p>{caso.descripcion}</p>
+                                <p>{caso.texto}</p>
+                                <ol class="proyecto-pasos">
+                                    {caso.pasos.map((paso) => (
+                                        <li>{paso}</li>
+                                    ))}
+                                </ol>
+                                <p><strong>Formas normales aplicadas:</strong> {caso.formas}</p>
+                            </details>
+                        ))}
+                    </div>
+                </section>
+
+                <!-- ===================== EXCEL ===================== -->
+                <section class="proyecto-card">
+                    <h2>Archivo de Excel</h2>
+                    <p>
+                        El archivo contiene el desarrollo de los ejercicios de normalización y la información
+                        organizada en sus diferentes hojas de cálculo, una por cada caso práctico.
+                    </p>
+
+                    <a
+                        class="proyecto-link"
+                        href={EXCEL_URL}
+                        download="GrupoMSA_Casos.xlsx"
+                    >
+                        Descargar el Excel de los casos
+                    </a>
+                </section>
+
+                <!-- ===================== PDF ===================== -->
+                <section class="proyecto-card">
+                    <h2>Documento PDF</h2>
+                    <p>Visualiza el documento original del taller de normalización.</p>
+
+                    <div class="proyecto-diagrama">
+                        <iframe
+                            src={`${PDF_URL}#toolbar=1&navpanes=0&view=FitH`}
+                            title="Taller de normalización - Grupo MSA"
+                            loading="lazy"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+
+                    <p>
+                        ¿No puedes visualizar el documento?
+                        <a
+                            class="proyecto-link"
+                            href={PDF_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Abrir el PDF en una pestaña nueva
+                        </a>
+                        <a
+                            class="proyecto-link"
+                            href={PDF_URL}
+                            download="BASES-DE-DATOS-TALLER-GrupoMSA.pdf"
+                        >
+                            Descargar el PDF
+                        </a>
+                    </p>
+                </section>
+
+                <!-- ===================== CONCLUSIÓN ===================== -->
+                <section class="proyecto-card">
+                    <h2>Aprendizajes del taller</h2>
+
+                    <p>
+                        Normalizar no es solo "partir tablas": es entender de qué depende cada dato.
+                        Cuando una tabla repite información, tarde o temprano aparecen errores al insertar,
+                        actualizar o borrar registros.
+                    </p>
+
+                    <p>
+                        Los tres casos mostraron que cada forma normal resuelve un problema distinto:
+                        separar valores repetidos, eliminar dependencias parciales y transitivas, y
+                        manejar atributos multivaluados con tablas intermedias.
+                    </p>
+                </section>
+
+            </div>
+
         </div>
-      </details>
-    </section>
-
-    <section class="quiz-cell">
-      <h3 class="norm-caso">Caso 3: Empleados e idiomas</h3>
-      <p>
-        Tratamiento de los datos de empleados que pueden manejar varios
-        idiomas.
-      </p>
-      <details class="norm-details">
-        <summary>Ver desarrollo</summary>
-        <div class="norm-body">
-          <p>
-            Se identifica la dependencia multivaluada que aparece cuando
-            un empleado puede tener asociados diferentes idiomas.
-          </p>
-          <ul>
-            <li>Identificación de atributos multivaluados.</li>
-            <li>Separación de empleados e idiomas.</li>
-            <li>Creación de una relación intermedia.</li>
-            <li>Aplicación de los principios de cuarta forma normal.</li>
-          </ul>
-        </div>
-      </details>
-    </section>
-  </div>
-
-  <h2 class="norm-subtitle">Archivo de Excel</h2>
-
-  <p class="norm-hint">
-    Consulta el archivo de trabajo con los casos prácticos y sus respectivas
-    hojas de desarrollo.
-  </p>
-
-  <div class="quiz-cell">
-    <p>
-      El archivo contiene el desarrollo de los ejercicios de normalización
-      y la información organizada en sus diferentes hojas de cálculo.
-    </p>
-
-    <p>
-      <a
-        class="proyecto-link"
-        href={EXCEL_URL}
-        download="GrupoMSA_Casos.xlsx"
-      >
-        Descargar archivo Excel
-      </a>
-    </p>
-  </div>
-
-  <h2 class="norm-subtitle">Documento PDF</h2>
-
-  <p class="norm-hint">
-    Visualiza el documento original del taller de normalización.
-  </p>
-
-  <iframe
-    class="norm-pdf-frame"
-    src={`${PDF_URL}#toolbar=1&navpanes=0&view=FitH`}
-    title="Taller de normalización - Grupo MSA"
-    loading="lazy"
-  ></iframe>
-
-  <p class="norm-pdf-links">
-    ¿No puedes visualizar el documento?
-    <a href={PDF_URL} target="_blank" rel="noopener noreferrer">
-      Abrir PDF en una pestaña nueva
-    </a>
-    |
-    <a href={PDF_URL} download="BASES-DE-DATOS-TALLER-GrupoMSA.pdf">
-      Descargar PDF
-    </a>
-  </p>
-</main>
-
+    </main>
+</Layout>
