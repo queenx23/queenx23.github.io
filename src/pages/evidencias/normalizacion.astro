@@ -1,3 +1,4 @@
+
 ---
 import { getAssetUrl } from '../../utils/assets';
 
@@ -5,367 +6,209 @@ const PDF_URL = getAssetUrl('/assets/images/BASES DE DATOS-TALLER_GrupoMSA.pdf')
 const EXCEL_URL = getAssetUrl('/assets/images/GrupoMSA_Casos.xlsx');
 ---
 
-<main class="normalizacion-page">
+<main class="norm-section">
+  <h1 class="norm-title">Normalización de bases de datos</h1>
 
-  <!-- ENCABEZADO -->
-  <section class="normalizacion-hero">
-    <span class="section-tag">BASES DE DATOS</span>
+  <p class="norm-hint">
+    Evidencia académica sobre el proceso de normalización, las formas normales
+    y la solución de casos prácticos mediante el diseño de bases de datos.
+  </p>
 
-    <h1>Normalización de bases de datos</h1>
+  <h2 class="norm-subtitle">¿Qué es la normalización?</h2>
 
+  <div class="quiz-cell">
     <p>
-      Proceso mediante el cual se organiza la información de una base de datos
-      para reducir la redundancia, evitar inconsistencias y mejorar la integridad
-      de los datos.
+      La normalización es un proceso que permite organizar los datos de una
+      base de datos para reducir la redundancia, evitar anomalías y mejorar
+      la integridad de la información. Para lograrlo, se aplican diferentes
+      formas normales que establecen reglas para estructurar las tablas y
+      sus relaciones.
     </p>
-  </section>
+  </div>
 
-  <!-- INTRODUCCIÓN -->
-  <section class="normalizacion-section">
-    <div class="section-heading">
-      <span class="section-tag">FUNDAMENTOS</span>
-      <h2>¿Qué es la normalización?</h2>
-    </div>
+  <h2 class="norm-subtitle">Formas normales</h2>
 
-    <p>
-      La normalización consiste en aplicar una serie de reglas sobre las
-      estructuras de una base de datos, organizando sus atributos y relaciones
-      mediante diferentes formas normales.
-    </p>
-
-    <div class="info-grid">
-      <article class="info-card">
-        <span class="card-number">01</span>
-        <h3>Reducir redundancia</h3>
+  <div class="quiz-cell">
+    <details class="norm-details">
+      <summary>Primera Forma Normal (1FN)</summary>
+      <div class="norm-body">
         <p>
-          Evitar almacenar repetidamente la misma información en diferentes
-          registros.
+          Cada atributo debe contener un único valor atómico. No se permiten
+          grupos repetidos ni atributos con múltiples valores dentro de una
+          misma celda.
         </p>
-      </article>
+      </div>
+    </details>
 
-      <article class="info-card">
-        <span class="card-number">02</span>
-        <h3>Evitar anomalías</h3>
+    <details class="norm-details">
+      <summary>Segunda Forma Normal (2FN)</summary>
+      <div class="norm-body">
         <p>
-          Prevenir problemas durante la inserción, actualización y eliminación
-          de registros.
+          Debe cumplir con la primera forma normal y todos los atributos que
+          no forman parte de una clave deben depender completamente de la
+          clave primaria, evitando dependencias parciales.
         </p>
-      </article>
+      </div>
+    </details>
 
-      <article class="info-card">
-        <span class="card-number">03</span>
-        <h3>Garantizar integridad</h3>
-        <p>
-          Mantener la consistencia y confiabilidad de la información almacenada.
-        </p>
-      </article>
-    </div>
-  </section>
-
-  <!-- FORMAS NORMALES -->
-  <section class="normalizacion-section">
-    <div class="section-heading">
-      <span class="section-tag">CONCEPTOS</span>
-      <h2>Formas normales</h2>
-    </div>
-
-    <div class="normal-form-list">
-
-      <article class="normal-form">
-        <div class="normal-form-header">
-          <span class="form-label">1FN</span>
-          <h3>Primera Forma Normal</h3>
-        </div>
-
-        <p>
-          Cada atributo debe contener valores atómicos, es decir, indivisibles.
-          No deben existir grupos repetitivos ni múltiples valores en una misma
-          celda.
-        </p>
-      </article>
-
-      <article class="normal-form">
-        <div class="normal-form-header">
-          <span class="form-label">2FN</span>
-          <h3>Segunda Forma Normal</h3>
-        </div>
-
-        <p>
-          Debe cumplir con la primera forma normal y eliminar las dependencias
-          parciales, de manera que cada atributo no primo dependa de la totalidad
-          de una clave candidata.
-        </p>
-      </article>
-
-      <article class="normal-form">
-        <div class="normal-form-header">
-          <span class="form-label">3FN</span>
-          <h3>Tercera Forma Normal</h3>
-        </div>
-
+    <details class="norm-details">
+      <summary>Tercera Forma Normal (3FN)</summary>
+      <div class="norm-body">
         <p>
           Debe cumplir con la segunda forma normal y eliminar las dependencias
-          transitivas entre atributos no primos y las claves candidatas.
+          transitivas entre atributos que no son clave.
         </p>
-      </article>
-    </div>
-  </section>
+      </div>
+    </details>
 
-  <!-- CASO 1: HOSPITAL -->
-  <section class="normalizacion-section">
-    <div class="section-heading">
-      <span class="section-tag">EJERCICIO 01</span>
-      <h2>Normalización de un hospital</h2>
-    </div>
+    <details class="norm-details">
+      <summary>Forma Normal de Boyce-Codd (BCNF)</summary>
+      <div class="norm-body">
+        <p>
+          Es una versión más estricta de la tercera forma normal. Para cada
+          dependencia funcional no trivial, el determinante debe ser una
+          superclave.
+        </p>
+      </div>
+    </details>
 
+    <details class="norm-details">
+      <summary>Cuarta Forma Normal (4FN)</summary>
+      <div class="norm-body">
+        <p>
+          Debe cumplir con BCNF y eliminar las dependencias multivaluadas
+          independientes que generan redundancia en una relación.
+        </p>
+      </div>
+    </details>
+  </div>
+
+  <h2 class="norm-subtitle">Desarrollo de casos prácticos</h2>
+
+  <p class="norm-hint">
+    Análisis de diferentes escenarios para identificar problemas de diseño
+    y aplicar las reglas de normalización.
+  </p>
+
+  <div class="norm-casos">
+    <section class="quiz-cell">
+      <h3 class="norm-caso">Caso 1: Hospital</h3>
+      <p>
+        Análisis de la información relacionada con pacientes, médicos,
+        especialidades y consultas.
+      </p>
+      <details class="norm-details">
+        <summary>Ver desarrollo</summary>
+        <div class="norm-body">
+          <p>
+            Se identifican los datos que deben almacenarse de forma
+            independiente para evitar la repetición de información y
+            establecer relaciones adecuadas entre las entidades.
+          </p>
+          <ul>
+            <li>Identificación de entidades y atributos.</li>
+            <li>Identificación de claves primarias y foráneas.</li>
+            <li>Separación de información repetitiva.</li>
+            <li>Organización de las relaciones entre tablas.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="quiz-cell">
+      <h3 class="norm-caso">Caso 2: Clientes y productos</h3>
+      <p>
+        Organización de la información de clientes, productos y sus
+        respectivas transacciones.
+      </p>
+      <details class="norm-details">
+        <summary>Ver desarrollo</summary>
+        <div class="norm-body">
+          <p>
+            Se separan los datos de los clientes y los productos de la
+            información correspondiente a las compras, evitando almacenar
+            varias veces los mismos datos.
+          </p>
+          <ul>
+            <li>Identificación de entidades independientes.</li>
+            <li>Definición de claves y dependencias funcionales.</li>
+            <li>Separación de las relaciones entre clientes y productos.</li>
+            <li>Reducción de redundancia.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="quiz-cell">
+      <h3 class="norm-caso">Caso 3: Empleados e idiomas</h3>
+      <p>
+        Tratamiento de los datos de empleados que pueden manejar varios
+        idiomas.
+      </p>
+      <details class="norm-details">
+        <summary>Ver desarrollo</summary>
+        <div class="norm-body">
+          <p>
+            Se identifica la dependencia multivaluada que aparece cuando
+            un empleado puede tener asociados diferentes idiomas.
+          </p>
+          <ul>
+            <li>Identificación de atributos multivaluados.</li>
+            <li>Separación de empleados e idiomas.</li>
+            <li>Creación de una relación intermedia.</li>
+            <li>Aplicación de los principios de cuarta forma normal.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+  </div>
+
+  <h2 class="norm-subtitle">Archivo de Excel</h2>
+
+  <p class="norm-hint">
+    Consulta el archivo de trabajo con los casos prácticos y sus respectivas
+    hojas de desarrollo.
+  </p>
+
+  <div class="quiz-cell">
     <p>
-      Se analiza una estructura hospitalaria para identificar dependencias
-      funcionales, anomalías y aplicar las formas normales hasta llegar a
-      una estructura en tercera forma normal.
+      El archivo contiene el desarrollo de los ejercicios de normalización
+      y la información organizada en sus diferentes hojas de cálculo.
     </p>
 
-    <div class="case-content">
-      <div class="case-block">
-        <h3>Problema identificado</h3>
-        <p>
-          La información relacionada con hospitalizaciones, pacientes, camas
-          y médicos se encuentra agrupada, lo que puede generar redundancia
-          y anomalías en las operaciones de la base de datos.
-        </p>
-      </div>
-
-      <div class="case-block">
-        <h3>Proceso de normalización</h3>
-        <div class="process-flow">
-          <span>Tabla inicial</span>
-          <span class="process-arrow">→</span>
-          <span>1FN</span>
-          <span class="process-arrow">→</span>
-          <span>2FN</span>
-          <span class="process-arrow">→</span>
-          <span>3FN</span>
-        </div>
-      </div>
-
-      <div class="case-block">
-        <h3>Resultado: estructura en 3FN</h3>
-
-        <div class="schema-grid">
-          <div class="schema-card">
-            <h4>HOSPITALIZACION</h4>
-            <p>Información de las hospitalizaciones.</p>
-          </div>
-
-          <div class="schema-card">
-            <h4>PACIENTE</h4>
-            <p>Datos correspondientes a cada paciente.</p>
-          </div>
-
-          <div class="schema-card">
-            <h4>CAMA</h4>
-            <p>Información de las camas hospitalarias.</p>
-          </div>
-
-          <div class="schema-card">
-            <h4>MEDICO</h4>
-            <p>Información de los médicos.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CASO 2: CLIENTES Y PRODUCTOS -->
-  <section class="normalizacion-section">
-    <div class="section-heading">
-      <span class="section-tag">EJERCICIO 02</span>
-      <h2>Clientes y productos</h2>
-    </div>
-
     <p>
-      Se estudia una relación que almacena información de clientes y productos,
-      identificando dependencias funcionales y problemas derivados de una
-      estructura que no está correctamente normalizada.
-    </p>
-
-    <div class="case-content">
-      <div class="case-block">
-        <h3>Dependencias funcionales</h3>
-        <p>
-          Se analizan las relaciones entre los atributos para identificar
-          dependencias parciales y transitivas.
-        </p>
-      </div>
-
-      <div class="case-block">
-        <h3>Anomalías identificadas</h3>
-
-        <div class="anomaly-grid">
-          <article class="anomaly-card">
-            <h4>Actualización</h4>
-            <p>
-              La modificación de información repetida puede generar
-              inconsistencias.
-            </p>
-          </article>
-
-          <article class="anomaly-card">
-            <h4>Dependencias parciales</h4>
-            <p>
-              Algunos atributos pueden depender únicamente de una parte
-              de una clave compuesta.
-            </p>
-          </article>
-
-          <article class="anomaly-card">
-            <h4>Dependencias transitivas</h4>
-            <p>
-              Un atributo puede depender de otro atributo que no es una
-              clave candidata.
-            </p>
-          </article>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CASO 3: EMPLEADOS E IDIOMAS -->
-  <section class="normalizacion-section">
-    <div class="section-heading">
-      <span class="section-tag">EJERCICIO 03</span>
-      <h2>Empleados e idiomas</h2>
-    </div>
-
-    <p>
-      Se analiza una estructura que almacena múltiples competencias e idiomas
-      asociados a cada empleado, identificando problemas relacionados con
-      atributos multivaluados.
-    </p>
-
-    <div class="case-content">
-      <div class="case-block">
-        <h3>Problema: incumplimiento de 1FN</h3>
-        <p>
-          La estructura original contiene múltiples valores en determinados
-          atributos, lo que impide mantener valores atómicos.
-        </p>
-      </div>
-
-      <div class="case-block">
-        <h3>Solución: separación de entidades</h3>
-
-        <div class="schema-grid">
-          <div class="schema-card">
-            <h4>EMPLEADO</h4>
-            <p>Información de los empleados.</p>
-          </div>
-
-          <div class="schema-card">
-            <h4>COMPETENCIA</h4>
-            <p>Catálogo de competencias.</p>
-          </div>
-
-          <div class="schema-card">
-            <h4>EMPLEADO_COMPETENCIA</h4>
-            <p>Relación entre empleados y competencias.</p>
-          </div>
-
-          <div class="schema-card">
-            <h4>IDIOMA</h4>
-            <p>Catálogo de idiomas.</p>
-          </div>
-
-          <div class="schema-card">
-            <h4>EMPLEADO_IDIOMA</h4>
-            <p>Relación entre empleados e idiomas.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="case-block">
-        <h3>Resultado</h3>
-        <p>
-          La separación de las tablas permite representar las relaciones
-          multivaluadas mediante tablas intermedias y consultar la información
-          de manera organizada.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ARCHIVO EXCEL -->
-  <section class="normalizacion-section">
-    <div class="section-heading">
-      <span class="section-tag">ARCHIVO DE TRABAJO</span>
-      <h2>Desarrollo de los ejercicios en Excel</h2>
-    </div>
-
-    <p>
-      En este archivo se encuentra el desarrollo de los tres casos de
-      normalización trabajados: Hospital, Clientes y Productos, y Empleados.
-      Se incluyen las estructuras originales, el análisis de dependencias
-      funcionales y la transformación de las tablas.
-    </p>
-
-    <div class="case-block">
-      <h3>Contenido del archivo</h3>
-
-      <ul>
-        <li>
-          <strong>Hoja 1:</strong> Normalización del caso Hospital.
-        </li>
-        <li>
-          <strong>Hoja 2:</strong> Normalización de Clientes y Productos.
-        </li>
-        <li>
-          <strong>Hoja 3:</strong> Normalización de Empleados, Competencias e Idiomas.
-        </li>
-      </ul>
-
       <a
         class="proyecto-link"
         href={EXCEL_URL}
-        download="GrupoMSA_Casos.xlsx">
-        Descargar Excel de normalización
+        download="GrupoMSA_Casos.xlsx"
+      >
+        Descargar archivo Excel
       </a>
-    </div>
-  </section>
-
-  <!-- DOCUMENTO PDF -->
-  <section class="normalizacion-section pdf-section">
-    <div class="section-heading">
-      <span class="section-tag">EVIDENCIA</span>
-      <h2>Taller de normalización</h2>
-    </div>
-
-    <p>
-      Consulta el documento completo con el desarrollo de los ejercicios
-      y el análisis de las estructuras de datos.
     </p>
+  </div>
 
-    <iframe
-      class="norm-pdf-frame"
-      src={`${PDF_URL}#toolbar=1&navpanes=0&view=FitH`}
-      title="Taller de normalización"
-      loading="lazy">
-    </iframe>
+  <h2 class="norm-subtitle">Documento PDF</h2>
 
-    <div class="norm-pdf-links">
-      <a
-        href={PDF_URL}
-        target="_blank"
-        rel="noopener noreferrer">
-        Abrir PDF en una pestaña nueva
-      </a>
+  <p class="norm-hint">
+    Visualiza el documento original del taller de normalización.
+  </p>
 
-      <span> | </span>
+  <iframe
+    class="norm-pdf-frame"
+    src={`${PDF_URL}#toolbar=1&navpanes=0&view=FitH`}
+    title="Taller de normalización - Grupo MSA"
+    loading="lazy"
+  ></iframe>
 
-      <a
-        href={PDF_URL}
-        download="Taller-Normalizacion.pdf">
-        Descargar documento
-      </a>
-    </div>
-  </section>
-
+  <p class="norm-pdf-links">
+    ¿No puedes visualizar el documento?
+    <a href={PDF_URL} target="_blank" rel="noopener noreferrer">
+      Abrir PDF en una pestaña nueva
+    </a>
+    |
+    <a href={PDF_URL} download="BASES-DE-DATOS-TALLER-GrupoMSA.pdf">
+      Descargar PDF
+    </a>
+  </p>
 </main>
+
