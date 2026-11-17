@@ -1,20 +1,375 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import Layout from '../../layouts/Layout.astro';
 import SiteNav from '../../components/SiteNav.astro';
+import { getAssetUrl } from '../../config';
+
+// Los 17 archivos .sql se guardan en: public/assets/files/sql/
+const SQL_DIR = 'assets/files/sql';
+
+const grupos = [
+    {
+        id: 'esquema',
+        nombre: 'Revisión del esquema',
+        intro: 'Antes de consultar datos se comprueba que la base implementada coincide con el modelo relacional.',
+        scripts: [
+            {
+                archivo: '01_revision_general_esquema.sql',
+                titulo: 'Revisión general del esquema',
+                descripcion:
+                    'Lista las tablas de la base de datos, muestra cuántas filas tiene cada una según information_schema y ejecuta DESCRIBE sobre las 17 tablas para ver columnas, tipos y llaves.',
+                idea:
+                    'Es el punto de partida: confirma que las tablas, las llaves primarias y las llaves foráneas del modelo transformado quedaron bien creadas antes de correr cualquier otra consulta.',
+                tablas: ['Las 17 tablas'],
+                conceptos: ['SHOW TABLES', 'information_schema', 'DESCRIBE'],
+            },
+        ],
+    },
+    {
+        id: 'clientes',
+        nombre: 'Clientes, socios y fidelización',
+        intro: 'Consultas sobre las personas que usan el café y los datos que se guardan de cada una.',
+        scripts: [
+            {
+                archivo: '03_busqueda_cliente_por_nombre.sql',
+                titulo: 'Búsqueda de cliente por nombre',
+                descripcion:
+                    'Busca clientes cuyo primer nombre, segundo nombre o apellidos contengan un texto, sin exigir coincidencia exacta, y muestra el nombre completo ordenado por apellido.',
+                idea:
+                    'En el mostrador casi nunca se sabe el documento del cliente, pero sí su nombre. La búsqueda parcial permite encontrarlo rápido aunque se escriba solo una parte.',
+                tablas: ['CLIENTE'],
+                conceptos: ['LIKE', 'CONCAT_WS', 'Variable de sesión'],
+            },
+            {
+                archivo: '04_clientes_frecuentes_y_puntos.sql',
+                titulo: 'Clientes frecuentes y puntos',
+                descripcion:
+                    'Une CLIENTE_FRECUENTE con CLIENTE para mostrar puntos acumulados y nivel de fidelidad con el nombre de cada persona, y después cuenta cuántos clientes hay por nivel y su promedio de puntos.',
+                idea:
+                    'El cliente frecuente es una especialización del cliente: comparte el mismo documento y solo guarda los datos de fidelización. El JOIN reconstruye la información completa.',
+                tablas: ['CLIENTE', 'CLIENTE_FRECUENTE'],
+                conceptos: ['INNER JOIN', 'GROUP BY', 'COUNT', 'AVG'],
+            },
+            {
+                archivo: '05_socios_por_fecha_afiliacion.sql',
+                titulo: 'Socios por fecha de afiliación',
+                descripcion:
+                    'Lista los socios afiliados dentro de un periodo con su nombre completo, y calcula el total de socios, la primera y la última afiliación.',
+                idea:
+                    'Permite medir el crecimiento de la base de socios en el tiempo y ver quiénes se afiliaron recientemente.',
+                tablas: ['SOCIO', 'CLIENTE'],
+                conceptos: ['BETWEEN', 'CURDATE', 'INNER JOIN', 'MIN / MAX'],
+            },
+            {
+                archivo: '06_telefonos_por_cliente.sql',
+                titulo: 'Teléfonos por cliente',
+                descripcion:
+                    'Agrupa los teléfonos de cada cliente en una sola celda y muestra únicamente a quienes tienen más de un número registrado.',
+                idea:
+                    'Un cliente puede tener varios teléfonos, por eso se guardan en una tabla aparte (primera forma normal). Esta consulta vuelve a juntarlos para leerlos fácilmente.',
+                tablas: ['CLIENTE', 'TELEFONO'],
+                conceptos: ['LEFT JOIN', 'GROUP_CONCAT', 'HAVING'],
+            },
+        ],
+    },
+    {
+        id: 'membresias',
+        nombre: 'Membresías y beneficios',
+        intro: 'Seguimiento de los planes, su vigencia y lo que ofrece cada uno.',
+        scripts: [
+            {
+                archivo: '07_membresias_activas_y_vencimiento.sql',
+                titulo: 'Membresías activas y vencimiento',
+                descripcion:
+                    'Muestra las membresías con estado Activa junto al cliente, y calcula con CASE si la fecha de fin indica que siguen vigentes, ya vencieron o no tienen fecha. También resume la cantidad por plan y estado.',
+                idea:
+                    'El estado guardado puede decir "Activa" aunque la fecha ya pasó. Comparar ambos datos ayuda a detectar membresías que se deben actualizar.',
+                tablas: ['MEMBRESIA', 'CLIENTE'],
+                conceptos: ['CASE', 'CURDATE', 'GROUP BY', 'INNER JOIN'],
+            },
+            {
+                archivo: '08_beneficios_por_membresia.sql',
+                titulo: 'Beneficios por membresía',
+                descripcion:
+                    'Muestra cada membresía con sus beneficios y cuenta cuántos beneficios tiene cada una, dejando solo las que tienen al menos uno.',
+                idea:
+                    'Un plan tiene varios beneficios, por eso estos viven en su propia tabla con una llave foránea hacia la membresía. La consulta permite comparar qué tan completo es cada plan.',
+                tablas: ['MEMBRESIA', 'BENEFICIO'],
+                conceptos: ['LEFT JOIN', 'COUNT', 'HAVING'],
+            },
+        ],
+    },
+    {
+        id: 'empleados',
+        nombre: 'Empleados',
+        intro: 'Consulta del personal que atiende el café.',
+        scripts: [
+            {
+                archivo: '09_empleados_por_cargo.sql',
+                titulo: 'Empleados por cargo',
+                descripcion:
+                    'Busca empleados por cargo o apellido con coincidencia parcial y muestra cuántos empleados hay en cada cargo.',
+                idea:
+                    'Sirve para ubicar rápido a una persona o un rol, y para ver cómo está distribuido el equipo de trabajo.',
+                tablas: ['EMPLEADO'],
+                conceptos: ['LIKE', 'GROUP BY', 'COUNT'],
+            },
+        ],
+    },
+    {
+        id: 'mesas',
+        nombre: 'Mesas y reservas',
+        intro: 'Disponibilidad de mesas y reservas con los juegos que los clientes eligen de antemano.',
+        scripts: [
+            {
+                archivo: '10_mesas_por_capacidad_y_tematica.sql',
+                titulo: 'Mesas por capacidad y temática',
+                descripcion:
+                    'Filtra las mesas con una capacidad mínima y, de forma opcional, por temática. Además calcula la capacidad promedio por temática.',
+                idea:
+                    'Al llegar un grupo, el café necesita una mesa donde quepan todos. Si la temática se deja vacía, el filtro se ignora y se listan todas las mesas.',
+                tablas: ['MESA'],
+                conceptos: ['WHERE con condición opcional', 'LIKE', 'AVG'],
+            },
+            {
+                archivo: '11_reservas_en_rango_de_fechas.sql',
+                titulo: 'Reservas en un rango de fechas',
+                descripcion:
+                    'Muestra las reservas de un periodo con la fecha, el horario, el cliente y los datos de la mesa reservada.',
+                idea:
+                    'Reúne en una sola vista la información de tres tablas para planificar la operación de los días con más reservas.',
+                tablas: ['RESERVA', 'CLIENTE', 'MESA'],
+                conceptos: ['INNER JOIN (3 tablas)', 'BETWEEN', 'ORDER BY'],
+            },
+            {
+                archivo: '12_mesas_sin_reserva_en_fecha_hora.sql',
+                titulo: 'Mesas sin reserva en fecha y hora',
+                descripcion:
+                    'Encuentra las mesas que no tienen ninguna reserva registrada en una fecha y hora exactas.',
+                idea:
+                    'Responde la pregunta "¿qué mesas puedo ofrecer ahora?". Usa NOT EXISTS porque buscamos lo que no aparece en la tabla de reservas. La consulta compara fecha y hora exactas, no calcula duraciones.',
+                tablas: ['MESA', 'RESERVA'],
+                conceptos: ['NOT EXISTS', 'Subconsulta correlacionada', 'TIME / CAST'],
+            },
+            {
+                archivo: '13_juegos_preseleccionados_en_reserva.sql',
+                titulo: 'Juegos preseleccionados en una reserva',
+                descripcion:
+                    'Muestra los juegos que un cliente eligió para una reserva específica, con su edad mínima y duración de partida.',
+                idea:
+                    'Una reserva puede incluir varios juegos y un juego puede estar en varias reservas (relación de muchos a muchos). RESERVA_JUEGO es la tabla intermedia que las une.',
+                tablas: ['RESERVA_JUEGO', 'RESERVA', 'JUEGO_MESA'],
+                conceptos: ['Tabla intermedia', 'INNER JOIN (3 tablas)'],
+            },
+        ],
+    },
+    {
+        id: 'juegos',
+        nombre: 'Catálogo e inventario de juegos',
+        intro: 'Qué juegos existen, qué contienen y cuántas unidades físicas hay disponibles.',
+        scripts: [
+            {
+                archivo: '02_catalogo_juegos_por_jugadores.sql',
+                titulo: 'Catálogo de juegos por número de jugadores',
+                descripcion:
+                    'Busca los juegos que admiten una cantidad determinada de jugadores y muestra un resumen del catálogo: total de juegos, edad mínima más baja y máximo de jugadores.',
+                idea:
+                    'Es la consulta más usada en la mesa: un grupo de cierta cantidad de personas quiere saber a qué puede jugar.',
+                tablas: ['JUEGO_MESA'],
+                conceptos: ['Filtro por rango', 'COUNT', 'MIN / MAX'],
+            },
+            {
+                archivo: '14_busqueda_y_revision_expansiones.sql',
+                titulo: 'Búsqueda y revisión de expansiones',
+                descripcion:
+                    'Busca expansiones por nombre, descripción o contenido adicional, muestra la longitud del contenido y cuenta cuántas expansiones hay.',
+                idea:
+                    'Las expansiones agregan contenido a los juegos base. Poder buscarlas por texto ayuda a encontrarlas aunque no se recuerde el nombre exacto.',
+                tablas: ['EXPANSION'],
+                conceptos: ['LIKE en varias columnas', 'CHAR_LENGTH', 'COUNT'],
+            },
+            {
+                archivo: '15_elementos_de_cada_juego.sql',
+                titulo: 'Elementos de cada juego',
+                descripcion:
+                    'Relaciona cada juego con sus piezas (elementos) y cuenta cuántos elementos tiene registrados cada uno, incluidos los que no tienen ninguno.',
+                idea:
+                    'Los elementos son un atributo con varios valores que pasó a su propia tabla. Conocerlos permite revisar que un juego esté completo al devolverlo.',
+                tablas: ['JUEGO_MESA', 'ELEMENTO_JUEGO'],
+                conceptos: ['INNER JOIN', 'LEFT JOIN', 'COUNT'],
+            },
+            {
+                archivo: '16_inventario_y_estado_de_unidades.sql',
+                titulo: 'Inventario y estado de unidades',
+                descripcion:
+                    'Resume las unidades físicas por juego y estado, y calcula el total de unidades y cuántas están disponibles por cada juego.',
+                idea:
+                    'Un mismo juego puede tener varias copias, cada una en un estado distinto (disponible, prestada, en mal estado). Esta consulta es el control de inventario del proyecto.',
+                tablas: ['UNIDAD_JUEGO', 'JUEGO_MESA'],
+                conceptos: ['GROUP BY', 'SUM(CASE)', 'LEFT JOIN'],
+            },
+        ],
+    },
+    {
+        id: 'prestamos',
+        nombre: 'Préstamos',
+        intro: 'El núcleo del sistema: registrar qué se presta, a quién y quién lo entrega.',
+        scripts: [
+            {
+                archivo: '17_detalle_y_resumen_de_prestamos.sql',
+                titulo: 'Detalle y resumen de préstamos',
+                descripcion:
+                    'Muestra cada préstamo con su cliente, el empleado que lo entregó, el juego, el código de la unidad y su estado, y resume cuántos préstamos hay por tipo y estado de componentes.',
+                idea:
+                    'Es la consulta que conecta todo el modelo: un préstamo puede incluir varias unidades y cada unidad se identifica con la llave compuesta (num_serie, codigo). Se usa COUNT(DISTINCT) para no contar un préstamo varias veces.',
+                tablas: ['PRESTAMO', 'CLIENTE', 'EMPLEADO', 'PRESTAMO_UNIDAD_JUEGO', 'UNIDAD_JUEGO', 'JUEGO_MESA'],
+                conceptos: ['LEFT JOIN múltiple', 'Llave compuesta', 'COUNT(DISTINCT)'],
+            },
+        ],
+    },
+];
+
+// Lee el contenido de cada archivo en tiempo de compilación para la vista previa
+const leerSql = (archivo: string): string => {
+    try {
+        return fs.readFileSync(path.join(process.cwd(), 'public', SQL_DIR, archivo), 'utf-8').trim();
+    } catch {
+        return '-- No se pudo cargar la vista previa. Descarga el archivo para verlo.';
+    }
+};
+
+const totalScripts = grupos.reduce((n, g) => n + g.scripts.length, 0);
 ---
 
-<Layout title="SQL">
+<Layout title="Scripts SQL">
     <header class="site-header outer no-cover">
         <div class="inner">
             <SiteNav />
             <div class="site-header-content">
-                <h1 class="site-title">SQL</h1>
+                <h1 class="site-title">Scripts SQL</h1>
+                <p class="site-description">
+                    Consultas de prueba sobre la base de datos del café ludoteca
+                </p>
             </div>
         </div>
     </header>
 
     <main id="site-main" class="site-main outer" role="main">
         <div class="inner">
+
+            <div class="proyecto-content">
+
+                <!-- ===================== INTRODUCCIÓN ===================== -->
+                <section class="proyecto-intro">
+                    <h2>Sobre los scripts</h2>
+                    <p>
+                        Estos son los <strong>{totalScripts} scripts SQL</strong> con los que se comprobó que la base
+                        de datos funciona. Cada uno responde una pregunta real del café: qué juegos admiten
+                        cierta cantidad de jugadores, qué mesas están libres, cuántas copias de un juego
+                        quedan o qué se ha prestado y a quién.
+                    </p>
+                    <p>
+                        De cada script puedes <strong>ver el código</strong> en la misma página, leer su
+                        <strong>descripción</strong> y su <strong>idea central</strong>, y
+                        <strong>descargar el archivo .sql</strong> para ejecutarlo en MySQL.
+                    </p>
+                </section>
+
+                <!-- ===================== CÓMO EJECUTARLOS ===================== -->
+                <section class="proyecto-card">
+                    <h2>Cómo ejecutarlos</h2>
+                    <ol class="proyecto-pasos">
+                        <li><strong>Crea y llena la base de datos</strong> <code>proyecto_db1</code> con el script de creación del proyecto.</li>
+                        <li><strong>Descarga el script</strong> que quieras probar.</li>
+                        <li><strong>Ábrelo en MySQL Workbench</strong> (o ejecútalo con <code>mysql &lt; archivo.sql</code>).</li>
+                        <li><strong>Cambia los valores de prueba</strong> en las líneas <code>SET @variable = ...</code> para consultar otros datos.</li>
+                    </ol>
+                </section>
+
+                <!-- ===================== ÍNDICE ===================== -->
+                <section class="proyecto-card">
+                    <h2>Índice de scripts</h2>
+                    <p>Los scripts están agrupados por tema. Haz clic en uno para ir directo a él.</p>
+
+                    {grupos.map((grupo) => (
+                        <details class="proyecto-details">
+                            <summary>{grupo.nombre} ({grupo.scripts.length})</summary>
+                            <ul>
+                                {grupo.scripts.map((s) => (
+                                    <li>
+                                        <a href={`#${s.archivo.slice(0, 2)}`}>
+                                            {s.archivo.slice(0, 2)} · {s.titulo}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </details>
+                    ))}
+                </section>
+
+                <!-- ===================== SCRIPTS POR GRUPO ===================== -->
+                {grupos.map((grupo) => (
+                    <section class="proyecto-grupo" id={grupo.id}>
+                        <h2 class="sql-grupo-titulo">{grupo.nombre}</h2>
+                        <p class="sql-grupo-intro">{grupo.intro}</p>
+
+                        {grupo.scripts.map((s) => (
+                            <article class="proyecto-card" id={s.archivo.slice(0, 2)}>
+                                <h3>
+                                    <span class="sql-numero">{s.archivo.slice(0, 2)}</span>
+                                    {s.titulo}
+                                </h3>
+
+                                <p><strong>Qué hace:</strong> {s.descripcion}</p>
+                                <p><strong>Idea central:</strong> {s.idea}</p>
+
+                                <div class="sql-etiquetas">
+                                    <span class="sql-etiquetas-titulo">Tablas:</span>
+                                    {s.tablas.map((t) => <span class="sql-etiqueta">{t}</span>)}
+                                </div>
+                                <div class="sql-etiquetas">
+                                    <span class="sql-etiquetas-titulo">Conceptos:</span>
+                                    {s.conceptos.map((c) => <span class="sql-etiqueta sql-etiqueta-alt">{c}</span>)}
+                                </div>
+
+                                <details class="proyecto-parte">
+                                    <summary>Ver código</summary>
+                                    <pre class="sql-codigo"><code>{leerSql(s.archivo)}</code></pre>
+                                </details>
+
+                                <a
+                                    class="proyecto-link"
+                                    href={getAssetUrl(`/${SQL_DIR}/${s.archivo}`)}
+                                    download={s.archivo}
+                                >
+                                    Descargar {s.archivo}
+                                </a>
+                            </article>
+                        ))}
+                    </section>
+                ))}
+
+                <!-- ===================== APRENDIZAJES ===================== -->
+                <section class="proyecto-card">
+                    <h2>Aprendizajes de las consultas</h2>
+
+                    <p>
+                        Escribir las consultas fue la prueba de que el diseño estaba bien hecho. Los JOIN
+                        solo funcionan limpiamente cuando las llaves primarias y foráneas se pensaron desde
+                        el modelo, y las tablas intermedias (como RESERVA_JUEGO o PRESTAMO_UNIDAD_JUEGO)
+                        demostraron por qué hacía falta separar las relaciones de muchos a muchos.
+                    </p>
+
+                    <p>
+                        También quedó claro que la misma pregunta puede resolverse de formas distintas:
+                        INNER JOIN cuando solo importan los datos que coinciden, LEFT JOIN cuando también
+                        interesa lo que no tiene relación, y NOT EXISTS cuando se busca lo que falta.
+                    </p>
+                </section>
+
+            </div>
+
         </div>
     </main>
 </Layout>
